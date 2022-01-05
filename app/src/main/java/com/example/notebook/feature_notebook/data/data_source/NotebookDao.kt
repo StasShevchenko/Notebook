@@ -5,6 +5,7 @@ import androidx.room.*
 import com.example.notebook.feature_notebook.domain.model.OrganizationInfo
 import com.example.notebook.feature_notebook.domain.model.PeopleInfo
 import com.example.notebook.feature_notebook.domain.model.entities.*
+import com.example.notebook.feature_notebook.domain.util.SearchType
 import kotlinx.coroutines.flow.Flow
 
 
@@ -14,13 +15,40 @@ interface NotebookDao {
     //
     //Все необходимое для работы с информацией о людях
     //
+
+    fun getEntries(searchType: SearchType): Flow<List<PeopleInfo>> =
+        when(searchType){
+            is SearchType.NameSearch -> getEntriesByName(searchType.searchQuery)
+            is SearchType.OrganizationSearch -> getEntriesByOrganization(searchType.searchQuery)
+            is SearchType.PostSearch -> getEntriesByPost(searchType.searchQuery)
+        }
+
     @Query("SELECT peopleId, name, secondName, patronymic, dateOfBirth, address, phoneNumber, timestamp, organizationName, organizationType, workersAmount, postName, familiarType, relativeType, favourite\n" +
             "FROM people\n" +
             " JOIN (SELECT organizationId, organizationName, workersAmount, organizationType FROM Organization JOIN OrganizationType USING(typeId)) USING (organizationId)\n" +
             " JOIN Post USING (postId)\n" +
             " JOIN RELATIONS USING (familiarId)\n" +
-            " JOIN Relatives USING(relativeId)\n")
-    fun getEntries(): Flow<List<PeopleInfo>>
+            " JOIN Relatives USING(relativeId)\nWHERE name LIKE '%' || :searchQuery || '%' ")
+    fun getEntriesByName(searchQuery: String): Flow<List<PeopleInfo>>
+
+    @Query("SELECT peopleId, name, secondName, patronymic, dateOfBirth, address, phoneNumber, timestamp, organizationName, organizationType, workersAmount, postName, familiarType, relativeType, favourite\n" +
+            "FROM people\n" +
+            " JOIN (SELECT organizationId, organizationName, workersAmount, organizationType FROM Organization JOIN OrganizationType USING(typeId)) USING (organizationId)\n" +
+            " JOIN Post USING (postId)\n" +
+            " JOIN RELATIONS USING (familiarId)\n" +
+            " JOIN Relatives USING(relativeId)\nWHERE organization LIKE '%' || :searchQuery || '%' ")
+    fun getEntriesByOrganization(searchQuery: String): Flow<List<PeopleInfo>>
+
+
+    @Query("SELECT peopleId, name, secondName, patronymic, dateOfBirth, address, phoneNumber, timestamp, organizationName, organizationType, workersAmount, postName, familiarType, relativeType, favourite\n" +
+            "FROM people\n" +
+            " JOIN (SELECT organizationId, organizationName, workersAmount, organizationType FROM Organization JOIN OrganizationType USING(typeId)) USING (organizationId)\n" +
+            " JOIN Post USING (postId)\n" +
+            " JOIN RELATIONS USING (familiarId)\n" +
+            " JOIN Relatives USING(relativeId)\nWHERE post LIKE '%' || :searchQuery || '%' ")
+    fun getEntriesByPost(searchQuery: String): Flow<List<PeopleInfo>>
+
+
 
     @Query("SELECT * FROM people WHERE peopleId = :id")
     suspend fun getEntryById(id: Int): People?
