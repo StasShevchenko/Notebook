@@ -5,13 +5,14 @@ import com.example.notebook.feature_notebook.domain.model.OrganizationInfo
 import com.example.notebook.feature_notebook.domain.model.PeopleInfo
 import com.example.notebook.feature_notebook.domain.model.entities.*
 import com.example.notebook.feature_notebook.domain.repository.NotebookRepository
+import com.example.notebook.feature_notebook.domain.util.SearchType
 import kotlinx.coroutines.flow.Flow
 
 class NotebookRepositoryImpl(
     private val dao: NotebookDao
 ) : NotebookRepository {
-    override fun getEntries(): Flow<List<PeopleInfo>> {
-        return dao.getEntries()
+    override fun getEntries(searchType: SearchType): Flow<List<PeopleInfo>> {
+        return dao.getEntries(searchType)
     }
 
     override suspend fun getEntryById(id: Int): People? {

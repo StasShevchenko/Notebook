@@ -4,6 +4,7 @@ import androidx.room.Query
 import com.example.notebook.feature_notebook.domain.model.OrganizationInfo
 import com.example.notebook.feature_notebook.domain.model.PeopleInfo
 import com.example.notebook.feature_notebook.domain.model.entities.*
+import com.example.notebook.feature_notebook.domain.util.SearchType
 import kotlinx.coroutines.flow.Flow
 
 interface NotebookRepository {
@@ -12,7 +13,7 @@ interface NotebookRepository {
     //
     //Все необходимое для работы с информацией о людях
     //
-    fun getEntries(): Flow<List<PeopleInfo>>
+    fun getEntries(searchType: SearchType): Flow<List<PeopleInfo>>
 
     suspend fun getEntryById(id: Int): People?
 
