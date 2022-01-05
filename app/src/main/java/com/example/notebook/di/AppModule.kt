@@ -3,6 +3,8 @@ package com.example.notebook.di
 import android.app.Application
 import androidx.room.Room
 import com.example.notebook.feature_notebook.data.data_source.NotebookDatabase
+import com.example.notebook.feature_notebook.data.repository.NotebookRepositoryImpl
+import com.example.notebook.feature_notebook.domain.repository.NotebookRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -24,5 +26,11 @@ object AppModule {
         )
             .createFromAsset("database/entries_db.db")
             .build()
+    }
+
+    @Provides
+    @Singleton
+    fun provideNotebookRepository(db: NotebookDatabase): NotebookRepository{
+        return NotebookRepositoryImpl(db.notebookDao)
     }
 }
