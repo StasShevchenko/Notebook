@@ -1,6 +1,8 @@
 package com.example.notebook.feature_notebook.data.data_source
 
 import android.provider.ContactsContract
+import androidx.compose.material.Icon
+import androidx.compose.runtime.Composable
 import androidx.room.*
 import com.example.notebook.feature_notebook.domain.model.OrganizationInfo
 import com.example.notebook.feature_notebook.domain.model.PeopleInfo
@@ -23,7 +25,7 @@ interface NotebookDao {
             is SearchType.PostSearch -> getEntriesByPost(searchType.searchQuery)
         }
 
-    @Query("SELECT peopleId, name, secondName, patronymic, dateOfBirth, address, phoneNumber, timestamp, organizationName, organizationType, workersAmount, postName, familiarType, relativeType, favourite\n" +
+    @Query("SELECT peopleId, name, secondName, patronymic, dateOfBirth, address, phoneNumber, timestamp, organizationName, organizationType, workersAmount, postName, familiarType, relativeType, favourite, organizationId, postId, relativeId, familiarId\n" +
             "FROM people\n" +
             " JOIN (SELECT organizationId, organizationName, workersAmount, organizationType FROM Organization JOIN OrganizationType USING(typeId)) USING (organizationId)\n" +
             " JOIN Post USING (postId)\n" +
@@ -31,7 +33,7 @@ interface NotebookDao {
             " JOIN Relatives USING(relativeId)\nWHERE name LIKE '%' || :searchQuery || '%' ")
     fun getEntriesByName(searchQuery: String): Flow<List<PeopleInfo>>
 
-    @Query("SELECT peopleId, name, secondName, patronymic, dateOfBirth, address, phoneNumber, timestamp, organizationName, organizationType, workersAmount, postName, familiarType, relativeType, favourite\n" +
+    @Query("SELECT peopleId, name, secondName, patronymic, dateOfBirth, address, phoneNumber, timestamp, organizationName, organizationType, workersAmount, postName, familiarType, relativeType, favourite, organizationId, postId, relativeId, familiarId\n" +
             "FROM people\n" +
             " JOIN (SELECT organizationId, organizationName, workersAmount, organizationType FROM Organization JOIN OrganizationType USING(typeId)) USING (organizationId)\n" +
             " JOIN Post USING (postId)\n" +
@@ -40,7 +42,7 @@ interface NotebookDao {
     fun getEntriesByOrganization(searchQuery: String): Flow<List<PeopleInfo>>
 
 
-    @Query("SELECT peopleId, name, secondName, patronymic, dateOfBirth, address, phoneNumber, timestamp, organizationName, organizationType, workersAmount, postName, familiarType, relativeType, favourite\n" +
+    @Query("SELECT peopleId, name, secondName, patronymic, dateOfBirth, address, phoneNumber, timestamp, organizationName, organizationType, workersAmount, postName, familiarType, relativeType, favourite, organizationId, postId, relativeId, familiarId\n" +
             "FROM people\n" +
             " JOIN (SELECT organizationId, organizationName, workersAmount, organizationType FROM Organization JOIN OrganizationType USING(typeId)) USING (organizationId)\n" +
             " JOIN Post USING (postId)\n" +
