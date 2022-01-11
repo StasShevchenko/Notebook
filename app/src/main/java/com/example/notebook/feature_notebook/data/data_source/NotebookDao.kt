@@ -25,12 +25,12 @@ interface NotebookDao {
             is SearchType.PostSearch -> getEntriesByPost(searchType.searchQuery)
         }
 
-    @Query("SELECT peopleId, name, secondName, patronymic, dateOfBirth, address, phoneNumber, timestamp, organizationName, organizationType, workersAmount, postName, familiarType, relativeType, favourite, organizationId, postId, relativeId, familiarId\n" +
+    @Query("SELECT peopleId, name, secondName, patronymic, dateOfBirth, address, phoneNumber, timestamp, organizationName, organizationType, workersAmount, postName, familiarType, relativeType, favourite, organizationId, postId, relativeId, familiarId \n" +
             "FROM people\n" +
             " JOIN (SELECT organizationId, organizationName, workersAmount, organizationType FROM Organization JOIN OrganizationType USING(typeId)) USING (organizationId)\n" +
             " JOIN Post USING (postId)\n" +
             " JOIN RELATIONS USING (familiarId)\n" +
-            " JOIN Relatives USING(relativeId)\nWHERE name LIKE '%' || :searchQuery || '%' ")
+            " JOIN Relatives USING(relativeId)\nWHERE (secondName || ' ' || name || ' ' || patronymic) LIKE '%' || :searchQuery || '%' ")
     fun getEntriesByName(searchQuery: String): Flow<List<PeopleInfo>>
 
     @Query("SELECT peopleId, name, secondName, patronymic, dateOfBirth, address, phoneNumber, timestamp, organizationName, organizationType, workersAmount, postName, familiarType, relativeType, favourite, organizationId, postId, relativeId, familiarId\n" +
@@ -38,7 +38,7 @@ interface NotebookDao {
             " JOIN (SELECT organizationId, organizationName, workersAmount, organizationType FROM Organization JOIN OrganizationType USING(typeId)) USING (organizationId)\n" +
             " JOIN Post USING (postId)\n" +
             " JOIN RELATIONS USING (familiarId)\n" +
-            " JOIN Relatives USING(relativeId)\nWHERE organization LIKE '%' || :searchQuery || '%' ")
+            " JOIN Relatives USING(relativeId)\nWHERE organizationName LIKE '%' || :searchQuery || '%' ")
     fun getEntriesByOrganization(searchQuery: String): Flow<List<PeopleInfo>>
 
 
@@ -47,7 +47,7 @@ interface NotebookDao {
             " JOIN (SELECT organizationId, organizationName, workersAmount, organizationType FROM Organization JOIN OrganizationType USING(typeId)) USING (organizationId)\n" +
             " JOIN Post USING (postId)\n" +
             " JOIN RELATIONS USING (familiarId)\n" +
-            " JOIN Relatives USING(relativeId)\nWHERE post LIKE '%' || :searchQuery || '%' ")
+            " JOIN Relatives USING(relativeId)\nWHERE postName LIKE '%' || :searchQuery || '%' ")
     fun getEntriesByPost(searchQuery: String): Flow<List<PeopleInfo>>
 
 
@@ -64,15 +64,15 @@ interface NotebookDao {
     //
     //Все необходимое для работы с информацией об организациях
     //
-    @Query("SELECT organizationId, organizationName, workersAmount, organizationType"+
-        "FROM People JOIN OrganizationType USING(typeId)")
+    @Query("SELECT organizationId, organizationName, workersAmount, organizationType "+
+        "FROM Organization JOIN OrganizationType USING(typeId)")
     fun getOrganizations(): Flow<List<OrganizationInfo>>
 
     @Query("SELECT * FROM organizationtype")
     suspend fun getOrganizationTypes(): List<OrganizationType>
 
     @Query("SELECT * FROM Organization WHERE organizationId = :organizationId")
-    suspend fun getOrganizationById(organizationId: Int)
+    suspend fun getOrganizationById(organizationId: Int): Organization
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertOrganization(organization: Organization)
@@ -90,7 +90,7 @@ interface NotebookDao {
     suspend fun insertPost(post: Post)
 
     @Query("SELECT * FROM Post WHERE postId = :postId")
-    suspend fun getPostById(postId: Int)
+    suspend fun getPostById(postId: Int): Post
 
     @Delete
     suspend fun deletePost(post: Post)

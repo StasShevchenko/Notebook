@@ -24,6 +24,10 @@ class EntriesViewModel @Inject constructor(
     private val notebookUseCases: NotebookUseCases
 ) : ViewModel() {
 
+    private var _isLoading = mutableStateOf(true)
+    val isLoading: State<Boolean> = _isLoading
+
+
     private val _state = mutableStateOf<EntriesState>(EntriesState())
     val state: State<EntriesState> = _state
 
@@ -34,6 +38,7 @@ class EntriesViewModel @Inject constructor(
 
     init {
         getEntries(SearchType.NameSearch(""), EntryOrder.Alphabet(OrderType.Descending))
+
     }
 
     fun onEvent(event: EntriesEvent) {
@@ -50,6 +55,7 @@ class EntriesViewModel @Inject constructor(
                 ) {
                     return
                 }
+                else getEntries(state.value.searchType, event.entryOrder)
 
             }
             EntriesEvent.RestoreEntry -> {
@@ -63,11 +69,20 @@ class EntriesViewModel @Inject constructor(
                     state.value.searchType.searchQuery == event.searchType.searchQuery) {
                   return
                 }
+                else
+                    _state.value = state.value.copy(searchQuery = event.searchType.searchQuery)
+                    getEntries(event.searchType, state.value.entriesOrder)
+
             }
             is EntriesEvent.ToggleSearchSection -> {
                 _state.value = state.value.copy(
                     isSearchSectionVisible = !state.value.isSearchSectionVisible
                 )
+            }
+            is EntriesEvent.Favourite -> {
+                viewModelScope.launch {
+                    notebookUseCases.addEntry(event.entry.toPeople() ?: return@launch)
+                }
             }
         }
     }
@@ -79,8 +94,9 @@ class EntriesViewModel @Inject constructor(
                  _state.value = state.value.copy(
                      entries = entries,
                      entriesOrder = entriesOrder,
-                     searchType = searchType
+                     searchType = searchType,
                  )
+                 _isLoading.value = false
              }
              .launchIn(viewModelScope)
     }

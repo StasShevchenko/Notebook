@@ -29,7 +29,7 @@ interface NotebookRepository {
 
     suspend fun getOrganizationTypes(): List<OrganizationType>
 
-    suspend fun getOrganizationById(organizationId: Int)
+    suspend fun getOrganizationById(organizationId: Int): Organization
 
     suspend fun insertOrganization(organization: Organization)
 
@@ -42,7 +42,7 @@ interface NotebookRepository {
 
     suspend fun insertPost(post: Post)
 
-    suspend fun getPostById(postId: Int)
+    suspend fun getPostById(postId: Int): Post
 
     suspend fun deletePost(post: Post)
 

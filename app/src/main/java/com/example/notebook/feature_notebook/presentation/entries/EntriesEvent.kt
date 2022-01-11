@@ -9,6 +9,7 @@ sealed class EntriesEvent{
     data class Search(val searchType: SearchType): EntriesEvent()
     data class Order(val entryOrder: EntryOrder): EntriesEvent()
     data class DeleteEntry(val entry: PeopleInfo): EntriesEvent()
+    data class Favourite(val entry: PeopleInfo): EntriesEvent()
     object RestoreEntry: EntriesEvent()
     object ToggleSearchSection: EntriesEvent()
 }

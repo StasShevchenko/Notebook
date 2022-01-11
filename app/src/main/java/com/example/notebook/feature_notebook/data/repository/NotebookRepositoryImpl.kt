@@ -35,7 +35,7 @@ class NotebookRepositoryImpl(
         return dao.getOrganizationTypes()
     }
 
-    override suspend fun getOrganizationById(organizationId: Int) {
+    override suspend fun getOrganizationById(organizationId: Int): Organization {
         return dao.getOrganizationById(organizationId)
     }
 
@@ -55,7 +55,7 @@ class NotebookRepositoryImpl(
         dao.insertPost(post)
     }
 
-    override suspend fun getPostById(postId: Int) {
+    override suspend fun getPostById(postId: Int): Post {
         return dao.getPostById(postId)
     }
 
