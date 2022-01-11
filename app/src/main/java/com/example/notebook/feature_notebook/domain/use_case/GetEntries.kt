@@ -30,7 +30,7 @@ class GetEntries(
                     is EntryOrder.Date -> entries.sortedByDescending { it.timestamp }
                 }
             }
-        }
+        }.sortedByDescending { it.favourite }
     }
     }
 }

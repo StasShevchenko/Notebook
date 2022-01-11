@@ -4,12 +4,18 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.layout.Box
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.ExperimentalComposeUiApi
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.notebook.feature_notebook.data.data_source.NotebookDao
 import com.example.notebook.feature_notebook.data.data_source.NotebookDatabase
@@ -33,10 +39,18 @@ class MainActivity : ComponentActivity() {
 
         setContent {
             NotebookTheme {
+                val focusManager = LocalFocusManager.current
+                val keyboardController = LocalSoftwareKeyboardController.current
                 // A surface container using the 'background' color from the theme
-                Surface(color = MaterialTheme.colors.background) {
-                    EntriesScreen()
-                }
+
+                    Surface(color = MaterialTheme.colors.background,
+                        modifier = Modifier.clickable(interactionSource = MutableInteractionSource(), indication = null) {
+                            focusManager.clearFocus()
+                            keyboardController?.hide()
+                        }) {
+                        EntriesScreen()
+                    }
+
             }
         }
     }

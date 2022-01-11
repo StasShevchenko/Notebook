@@ -83,6 +83,7 @@ class EntriesViewModel @Inject constructor(
                 viewModelScope.launch {
                     notebookUseCases.addEntry(event.entry.toPeople() ?: return@launch)
                 }
+
             }
         }
     }

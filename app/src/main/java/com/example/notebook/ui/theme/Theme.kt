@@ -17,8 +17,6 @@ private val LightColorPalette = lightColors(
     primary = LightGreen500,
     primaryVariant = LightGreen500Light,
     secondary = LightGreen300,
-
-
     background = Grey200,
     /*
     surface = Color.White,

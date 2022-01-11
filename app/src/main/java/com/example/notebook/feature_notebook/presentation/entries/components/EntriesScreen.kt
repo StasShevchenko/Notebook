@@ -1,6 +1,9 @@
 package com.example.notebook.feature_notebook.presentation.entries.components
 
+import androidx.compose.animation.animateContentSize
+import androidx.compose.animation.core.*
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.*
 import androidx.compose.material.*
@@ -83,20 +86,23 @@ fun EntriesScreen(
             LazyColumn(
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(top = 8.dp, bottom = 12.dp),
+                    .padding(top = 10.dp, bottom = 12.dp),
                 contentPadding = PaddingValues(top = 4.dp, bottom = 4.dp)
 
             ) {
                 items(state.entries, key = {it.peopleId}  ) { entry ->
-                    Row(modifier = Modifier.animateItemPlacement()) {
+
                         EntryItem(
                             entry = entry,
                             onFavouriteChanged = {
                                 viewModel.onEvent(EntriesEvent.Favourite(it))
                             },
+                            modifier = Modifier.animateItemPlacement(
+                                animationSpec = spring(
 
+                                )
                             )
-                    }
+                            )
 
 
                     Spacer(modifier = Modifier

@@ -1,16 +1,12 @@
 package com.example.notebook.feature_notebook.presentation.entries.components
 
 import androidx.compose.animation.animateContentSize
-import androidx.compose.animation.core.LinearOutSlowInEasing
-import androidx.compose.animation.core.animateFloatAsState
-import androidx.compose.animation.core.tween
+import androidx.compose.animation.core.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowDropDown
-import androidx.compose.material.icons.filled.Star
-import androidx.compose.material.icons.filled.StarOutline
+import androidx.compose.material.icons.filled.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.*
@@ -34,14 +30,14 @@ fun EntryItem(
     var expandedState by remember { mutableStateOf(false) }
 
     Card(
-        modifier = Modifier
-            .animateContentSize (
+        modifier = modifier
+            .animateContentSize(
                 animationSpec = tween(
-            durationMillis = 300,
-            easing = LinearOutSlowInEasing
+                    300,
+                    easing = LinearOutSlowInEasing
                 )
             )
-            .padding(12.dp),
+            .padding(start = 12.dp, end = 12.dp, top = 12.dp, bottom = 12.dp),
         shape = MaterialTheme.shapes.small,
         backgroundColor = MaterialTheme.colors.surface,
         elevation = 4.dp,
@@ -61,6 +57,7 @@ fun EntryItem(
                             .padding(start = 8.dp)
                     ) {
                         Text(
+                            modifier = Modifier.padding(top=4.dp),
                             text = "${entry.secondName} ${entry.name} ${entry.patronymic}",
                             style = TextStyle(
                                 color = MaterialTheme.colors.onSurface,
@@ -128,8 +125,42 @@ fun EntryItem(
                     }
                     if (entry.familiarType != "") {
                         Spacer(modifier = Modifier.height(4.dp))
-                        Text(text = "Отношения: ${entry.familiarType}")
+                        Text(text = "Отношения: ${entry.familiarType}", modifier = Modifier.padding(bottom = 8.dp))
                     }
+                    if(entry.familiarType != "" || entry.relativeType != "") {
+                        Divider()
+                    }
+                        Row() {
+                            IconButton(
+                                modifier = Modifier
+                                    .padding(4.dp)
+                                    .size(30.dp),
+                                onClick = {
+
+                                },
+                            ) {
+                                Icon(
+                                    imageVector = Icons.Default.Edit,
+                                    contentDescription = "",
+                                    tint = MaterialTheme.colors.onSurface
+                                    )
+                            }
+                            IconButton(
+                                modifier = Modifier
+                                    .padding(4.dp)
+                                    .size(30.dp),
+                                onClick = {
+
+                                },
+                            ) {
+                                Icon(
+                                    imageVector = Icons.Default.Delete,
+                                    contentDescription = "",
+                                    tint = MaterialTheme.colors.onSurface
+                                )
+                            }
+                        }
+
                 }
             }
 
