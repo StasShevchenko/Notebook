@@ -19,6 +19,7 @@ import androidx.navigation.NavController
 import com.example.notebook.feature_notebook.presentation.entries.EntriesEvent
 import com.example.notebook.feature_notebook.presentation.entries.EntriesViewModel
 
+
 @ExperimentalFoundationApi
 @ExperimentalComposeUiApi
 @ExperimentalMaterialApi
@@ -87,14 +88,15 @@ fun EntriesScreen(
 
             ) {
                 items(state.entries, key = {it.peopleId}  ) { entry ->
+                    Row(modifier = Modifier.animateItemPlacement()) {
                         EntryItem(
                             entry = entry,
                             onFavouriteChanged = {
                                 viewModel.onEvent(EntriesEvent.Favourite(it))
                             },
 
-                        )
-
+                            )
+                    }
 
 
                     Spacer(modifier = Modifier

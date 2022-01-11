@@ -1,8 +1,6 @@
 package com.example.notebook.feature_notebook.presentation.entries.components
 
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.*
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.RadioButton
 import androidx.compose.material.RadioButtonDefaults
@@ -27,6 +25,7 @@ fun DefaultRadioButton(
     RadioButton(
         selected = selected,
         onClick = onSelect,
+        modifier = Modifier.size(20.dp).padding(4.dp),
         colors = RadioButtonDefaults.colors(
             selectedColor = MaterialTheme.colors.primary,
             unselectedColor = MaterialTheme.colors.onBackground
