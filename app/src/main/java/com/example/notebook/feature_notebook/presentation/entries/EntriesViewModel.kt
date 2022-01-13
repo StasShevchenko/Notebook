@@ -70,7 +70,7 @@ class EntriesViewModel @Inject constructor(
                   return
                 }
                 else
-                    _state.value = state.value.copy(searchQuery = event.searchType.searchQuery)
+                    _state.value = state.value.copy(searchType = event.searchType)
                     getEntries(event.searchType, state.value.entriesOrder)
 
             }

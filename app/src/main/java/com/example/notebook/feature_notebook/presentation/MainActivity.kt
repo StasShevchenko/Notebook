@@ -17,12 +17,15 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.NavGraph
+import androidx.navigation.Navigator
 import com.example.notebook.feature_notebook.data.data_source.NotebookDao
 import com.example.notebook.feature_notebook.data.data_source.NotebookDatabase
 import com.example.notebook.feature_notebook.domain.model.entities.People
 import com.example.notebook.feature_notebook.domain.util.SearchType
 import com.example.notebook.feature_notebook.presentation.entries.components.EntriesScreen
 import com.example.notebook.ui.theme.NotebookTheme
+import com.ramcosta.composedestinations.DestinationsNavHost
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.coroutineScope
@@ -33,23 +36,31 @@ import javax.inject.Inject
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 
-    @OptIn(ExperimentalComposeUiApi::class, ExperimentalMaterialApi::class, ExperimentalFoundationApi::class)
+
+    @OptIn(
+        ExperimentalComposeUiApi::class,
+        ExperimentalMaterialApi::class,
+        ExperimentalFoundationApi::class
+    )
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         setContent {
             NotebookTheme {
+
                 val focusManager = LocalFocusManager.current
                 val keyboardController = LocalSoftwareKeyboardController.current
                 // A surface container using the 'background' color from the theme
+                Surface(color = MaterialTheme.colors.background,
+                    modifier = Modifier.clickable(
+                        interactionSource = MutableInteractionSource(),
+                        indication = null
+                    ) {
+                        focusManager.clearFocus()
+                        keyboardController?.hide()
+                    }) {
+                    DestinationsNavHost(navGraph = NavGraphs.root)
 
-                    Surface(color = MaterialTheme.colors.background,
-                        modifier = Modifier.clickable(interactionSource = MutableInteractionSource(), indication = null) {
-                            focusManager.clearFocus()
-                            keyboardController?.hide()
-                        }) {
-                        EntriesScreen()
-                    }
+                }
 
             }
         }

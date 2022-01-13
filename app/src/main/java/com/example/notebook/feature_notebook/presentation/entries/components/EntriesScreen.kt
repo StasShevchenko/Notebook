@@ -19,27 +19,32 @@ import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import com.example.notebook.feature_notebook.presentation.add_edit_entry.components.AddEditEntryScreen
+import com.example.notebook.feature_notebook.presentation.destinations.AddEditEntryScreenDestination
 import com.example.notebook.feature_notebook.presentation.entries.EntriesEvent
 import com.example.notebook.feature_notebook.presentation.entries.EntriesViewModel
+import com.ramcosta.composedestinations.annotation.Destination
+import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 
 
 @ExperimentalFoundationApi
 @ExperimentalComposeUiApi
 @ExperimentalMaterialApi
+@Destination(start = true)
 @Composable
 fun EntriesScreen(
+    navigator: DestinationsNavigator,
     viewModel: EntriesViewModel = hiltViewModel()
 ) {
     val state = viewModel.state.value
     val scaffoldState = rememberScaffoldState()
     val scope = rememberCoroutineScope()
 
-
     Scaffold(
         floatingActionButton = {
             FloatingActionButton(
                 onClick = {
-
+                navigator.navigate(AddEditEntryScreenDestination())
                 },
                 backgroundColor = MaterialTheme.colors.secondary
             ) {
@@ -59,7 +64,7 @@ fun EntriesScreen(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 SearchBar(
-                    searchQuery = state.searchQuery,
+                    searchQuery = state.searchType.searchQuery,
                     searchType = state.searchType,
                     orderType = state.entriesOrder,
                     expandedState = state.isSearchSectionVisible,
@@ -93,6 +98,7 @@ fun EntriesScreen(
                 items(state.entries, key = {it.peopleId}  ) { entry ->
 
                         EntryItem(
+                            navigator = navigator,
                             entry = entry,
                             onFavouriteChanged = {
                                 viewModel.onEvent(EntriesEvent.Favourite(it))
@@ -112,6 +118,5 @@ fun EntriesScreen(
             }
         }
     }
-
 
 }

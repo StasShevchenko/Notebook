@@ -13,13 +13,16 @@ class AddEntry(
     @Throws(InvalidEntryException::class)
     suspend operator fun invoke(entry: People){
         if (entry.name.isBlank()) {
-        throw InvalidEntryException("Имя не может быть пустым.")
+        throw InvalidEntryException("Необходимо заполнить имя!")
         }
         if (entry.secondName.isBlank()) {
-            throw InvalidEntryException("Фамилия не может быть пустой.")
+            throw InvalidEntryException("Необходимо заполнить фамилию!")
         }
         if (entry.patronymic.isBlank()) {
-            throw InvalidEntryException("Отчество не может быть пустым.")
+            throw InvalidEntryException("Необходимо заполнить отчество!")
+        }
+        if(entry.dateOfBirth.isBlank()){
+            throw InvalidEntryException("Выберите дату рождения!")
         }
         repository.insertEntry(entry)
     }

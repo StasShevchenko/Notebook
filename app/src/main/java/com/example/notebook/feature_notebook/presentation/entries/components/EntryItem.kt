@@ -19,10 +19,13 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.notebook.feature_notebook.domain.model.PeopleInfo
 import com.example.notebook.feature_notebook.domain.model.entities.People
+import com.example.notebook.feature_notebook.presentation.destinations.AddEditEntryScreenDestination
+import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 
 @ExperimentalMaterialApi
 @Composable
 fun EntryItem(
+    navigator: DestinationsNavigator,
     modifier: Modifier = Modifier,
     onFavouriteChanged: (PeopleInfo) -> Unit,
     entry: PeopleInfo
@@ -84,7 +87,6 @@ fun EntryItem(
                             modifier = Modifier
                                 .size(22.dp),
                             onClick = {
-
                                 onFavouriteChanged(entry.copy(favourite = !entry.favourite))
                             },
 
@@ -135,8 +137,8 @@ fun EntryItem(
                                 modifier = Modifier
                                     .padding(4.dp)
                                     .size(30.dp),
-                                onClick = {
-
+                                onClick =  {
+                                navigator.navigate(AddEditEntryScreenDestination(entry))
                                 },
                             ) {
                                 Icon(
@@ -169,6 +171,8 @@ fun EntryItem(
 
 }
 
+
+/*
 @ExperimentalMaterialApi
 @Preview
 @Composable
@@ -199,30 +203,8 @@ fun EntryItemPreview() {
     )
 
 }
+*/
 
-@Preview
-@Composable
-fun SimpleCard() {
-    val paddingModifier = Modifier.padding(20.dp)
-    Card(
-        elevation = 0.dp,
-        modifier = paddingModifier
-    ) {
-
-        Surface(
-            color = MaterialTheme.colors.primaryVariant,
-            modifier = Modifier.padding(0.dp),
-            shape = RoundedCornerShape(4.dp)
-        ) {
-            Text(
-                text = "Simple Card with elevation",
-                modifier = Modifier.padding(0.dp)
-            )
-        }
-
-
-    }
-}
 
 
 

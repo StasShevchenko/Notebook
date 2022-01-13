@@ -1,8 +1,11 @@
 package com.example.notebook.feature_notebook.domain.model
 
+import android.os.Parcelable
 import com.example.notebook.feature_notebook.domain.model.entities.People
+import kotlinx.parcelize.Parcelize
 import kotlin.Exception
 
+@Parcelize
 data class PeopleInfo(
     val peopleId: Int,
     val name: String,
@@ -23,7 +26,7 @@ data class PeopleInfo(
     val postId: Int,
     val relativeId: Int,
     val familiarId: Int,
-)
+): Parcelable
 
 fun PeopleInfo?.toPeople(): People? {
     if(this != null) {
@@ -45,4 +48,4 @@ fun PeopleInfo?.toPeople(): People? {
     } else return null
 }
 
-class InvalidEntryException(message: String): Exception(message)
+class InvalidEntryException(message: String,): Exception(message)
