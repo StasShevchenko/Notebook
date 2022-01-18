@@ -16,27 +16,59 @@ class AddEditEntryViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
-
-
-
     private val _name = mutableStateOf("")
     val name: State<String> = _name
 
+
     private val _secondName = mutableStateOf("")
     val secondName: State<String> = _secondName
-    
+
     private val _patronymic = mutableStateOf<String>("")
     val patronymic: State<String> = _patronymic
-    
-    private val _dataOfBirth = mutableStateOf<String>("")
-    val dataOfBirth: State<String> = _dataOfBirth
-    
+
+    private val _dateOfBirth = mutableStateOf<String>("")
+    val dateOfBirth: State<String> = _dateOfBirth
+
+    private val _phoneNumber = mutableStateOf<String>("")
+    val phoneNumber: State<String> = _phoneNumber
+
     private val _address = mutableStateOf<String>("")
     val address: State<String> = _address
+
+
+    fun onEvent(event: AddEditEntryEvent) {
+        when (event) {
+            is AddEditEntryEvent.EnteredAddress -> {
+                _address.value = event.address
+            }
+            is AddEditEntryEvent.EnteredDate -> {
+                _dateOfBirth.value = event.dateOfBirth
+            }
+            is AddEditEntryEvent.EnteredName -> {
+                _name.value = event.name
+            }
+            is AddEditEntryEvent.EnteredPatronymic -> {
+                _patronymic.value = event.patronymic
+            }
+            is AddEditEntryEvent.EnteredPhoneNumber -> {
+                _phoneNumber.value = event.phoneNumber
+            }
+            is AddEditEntryEvent.EnteredSecondName -> {
+                _secondName.value = event.secondName
+            }
+        }
+    }
+
+
 
     init{
         savedStateHandle.get<PeopleInfo>("entry")?.let { entry ->
             _name.value = entry.name
+            _secondName.value = entry.secondName
+            _patronymic.value = entry.patronymic
+            _dateOfBirth.value = entry.dateOfBirth
+            _address.value = entry.address
+            _phoneNumber.value = entry.phoneNumber
         }
     }
 

@@ -20,13 +20,13 @@ class GetEntries(
         when(entryOrder.orderType){
             is OrderType.Ascending -> {
                 when(entryOrder){
-                    is EntryOrder.Alphabet -> entries.sortedBy { it.name.lowercase() }
+                    is EntryOrder.Alphabet -> entries.sortedBy { it.secondName.lowercase() }
                     is EntryOrder.Date -> entries.sortedBy { it.timestamp }
                 }
             }
             is OrderType.Descending -> {
                 when(entryOrder){
-                    is EntryOrder.Alphabet -> entries.sortedByDescending { it.name.lowercase() }
+                    is EntryOrder.Alphabet -> entries.sortedByDescending { it.secondName.lowercase()}
                     is EntryOrder.Date -> entries.sortedByDescending { it.timestamp }
                 }
             }

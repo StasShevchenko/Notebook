@@ -1,5 +1,6 @@
 package com.example.notebook.feature_notebook.presentation
 
+import android.content.res.Configuration
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -30,6 +31,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
+import java.util.*
 import javax.inject.Inject
 
 
@@ -44,6 +46,12 @@ class MainActivity : ComponentActivity() {
     )
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        val locale: Locale = Locale("ru","RU")
+        Locale.setDefault(locale)
+        val config = resources.configuration
+        config.setLocale(locale)
+
+
         setContent {
             NotebookTheme {
 
