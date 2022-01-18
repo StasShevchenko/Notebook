@@ -8,6 +8,7 @@ import androidx.navigation.navArgument
 import com.example.notebook.feature_notebook.domain.model.PeopleInfo
 import com.example.notebook.feature_notebook.domain.use_case.NotebookUseCases
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableSharedFlow
 import javax.inject.Inject
 
 @HiltViewModel
@@ -71,6 +72,7 @@ class AddEditEntryViewModel @Inject constructor(
             _phoneNumber.value = entry.phoneNumber
         }
     }
+
 
 
 

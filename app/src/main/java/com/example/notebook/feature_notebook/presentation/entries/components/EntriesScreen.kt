@@ -25,6 +25,7 @@ import com.example.notebook.feature_notebook.presentation.entries.EntriesEvent
 import com.example.notebook.feature_notebook.presentation.entries.EntriesViewModel
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
+import kotlinx.coroutines.launch
 
 
 @ExperimentalFoundationApi
@@ -44,7 +45,7 @@ fun EntriesScreen(
         floatingActionButton = {
             FloatingActionButton(
                 onClick = {
-                navigator.navigate(AddEditEntryScreenDestination())
+                    navigator.navigate(AddEditEntryScreenDestination())
                 },
                 backgroundColor = MaterialTheme.colors.secondary
             ) {
@@ -81,7 +82,10 @@ fun EntriesScreen(
             }
             Spacer(modifier = Modifier.height(16.dp))
             if (viewModel.isLoading.value) {
-                Column(modifier = Modifier.fillMaxSize(), verticalArrangement = Arrangement.Center) {
+                Column(
+                    modifier = Modifier.fillMaxSize(),
+                    verticalArrangement = Arrangement.Center
+                ) {
                     CircularProgressIndicator(
                         modifier = Modifier.align(Alignment.CenterHorizontally),
                         color = MaterialTheme.colors.primary
@@ -95,24 +99,35 @@ fun EntriesScreen(
                 contentPadding = PaddingValues(top = 4.dp, bottom = 4.dp)
 
             ) {
-                items(state.entries, key = {it.peopleId}  ) { entry ->
+                items(state.entries, key = { it.peopleId }) { entry ->
 
-                        EntryItem(
-                            navigator = navigator,
-                            entry = entry,
-                            onFavouriteChanged = {
-                                viewModel.onEvent(EntriesEvent.Favourite(it))
-                            },
-                            modifier = Modifier.animateItemPlacement(
-                                animationSpec = spring(
-
+                    EntryItem(
+                        navigator = navigator,
+                        entry = entry,
+                        onFavouriteChanged = {
+                            viewModel.onEvent(EntriesEvent.Favourite(it))
+                        },
+                        modifier = Modifier.animateItemPlacement(
+                            animationSpec = spring()
+                        ),
+                        onDeleteEntry ={ entry ->
+                            viewModel.onEvent(EntriesEvent.DeleteEntry(entry))
+                            scope.launch {
+                                val result = scaffoldState.snackbarHostState.showSnackbar(
+                                    message = "Запись удалена",
+                                    actionLabel = "Отмена"
                                 )
-                            )
-                            )
+                                if(result == SnackbarResult.ActionPerformed){
+                                    viewModel.onEvent(EntriesEvent.RestoreEntry)
+                                }
+                            }
+                        }
+                    )
 
 
-                    Spacer(modifier = Modifier
-                        .height(16.dp)
+                    Spacer(
+                        modifier = Modifier
+                            .height(16.dp)
                     )
                 }
             }

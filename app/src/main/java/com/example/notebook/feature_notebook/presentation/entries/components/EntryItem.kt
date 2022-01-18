@@ -28,6 +28,7 @@ fun EntryItem(
     navigator: DestinationsNavigator,
     modifier: Modifier = Modifier,
     onFavouriteChanged: (PeopleInfo) -> Unit,
+    onDeleteEntry: (PeopleInfo) -> Unit,
     entry: PeopleInfo
 ) {
     var expandedState by remember { mutableStateOf(false) }
@@ -152,7 +153,7 @@ fun EntryItem(
                                     .padding(4.dp)
                                     .size(30.dp),
                                 onClick = {
-
+                                onDeleteEntry(entry)
                                 },
                             ) {
                                 Icon(
