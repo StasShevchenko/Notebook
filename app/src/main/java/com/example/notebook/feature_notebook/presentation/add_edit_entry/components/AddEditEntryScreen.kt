@@ -5,6 +5,8 @@ import android.widget.DatePicker
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Save
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -29,115 +31,130 @@ fun AddEditEntryScreen(
     navigator: DestinationsNavigator,
     viewModel: AddEditEntryViewModel = hiltViewModel(),
 ) {
-    Surface(
-        color = MaterialTheme.colors.surface
+    Scaffold(
+        floatingActionButton = {
+            FloatingActionButton(
+                onClick = {
+                    viewModel.onEvent((AddEditEntryEvent.SaveEntry))
+                },
+                backgroundColor = MaterialTheme.colors.primary
+            ) {
+                Icon(imageVector = Icons.Default.Save, contentDescription = "")
+            }
+        }
     ) {
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .fillMaxHeight(),
-            horizontalAlignment = Alignment.CenterHorizontally
+        Surface(
+            color = MaterialTheme.colors.surface
         ) {
-            Text(
-                "Информация о записи:",
-                style = TextStyle(fontSize = MaterialTheme.typography.h5.fontSize),
-                modifier = Modifier.padding(top = 8.dp)
-            )
-            OutlinedTextField(
+            Column(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(8.dp),
-                value = viewModel.name.value,
-                onValueChange = { name ->
-                         viewModel.onEvent(AddEditEntryEvent.EnteredName(name))
-                },
-                label = { Text("Имя") },
-                singleLine = true
-            )
-            Spacer(modifier = Modifier.height(4.dp))
-            OutlinedTextField(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(8.dp),
-                value = viewModel.secondName.value,
-                onValueChange = {secondName ->
-                    viewModel.onEvent(AddEditEntryEvent.EnteredSecondName(secondName))
-                },
-                label = { Text("Фамилия") },
-                singleLine = true
-            )
-            Spacer(modifier = Modifier.height(4.dp))
-            OutlinedTextField(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(8.dp),
-                value = viewModel.patronymic.value,
-                onValueChange = {patronymic ->
-                     viewModel.onEvent(AddEditEntryEvent.EnteredPatronymic(patronymic))
-                },
-                label = { Text("Отчество") },
-                singleLine = true
-            )
-            Spacer(modifier = Modifier.height(4.dp))
-
-
-
-            showDatePicker(dateOfBirth = viewModel.dateOfBirth.value, onDateChange = { dateOfBirth ->
-                viewModel.onEvent(AddEditEntryEvent.EnteredDate(dateOfBirth))
-            })
-
-
-
-
-
-            Spacer(modifier = Modifier.height(4.dp))
-            OutlinedTextField(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(8.dp),
-                value = viewModel.address.value,
-                onValueChange = { address ->
-                                viewModel.onEvent(AddEditEntryEvent.EnteredAddress(address))
-                },
-                label = { Text("Адрес") },
-                singleLine = true
-            )
-            Spacer(modifier = Modifier.height(4.dp))
-            OutlinedTextField(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(8.dp),
-                value = viewModel.phoneNumber.value,
-                onValueChange = { phoneNumber ->
-                       viewModel.onEvent(AddEditEntryEvent.EnteredPhoneNumber(phoneNumber))
-                },
-                label = { Text("Номер телефона") },
-                singleLine = true
-            )
-            Spacer(modifier = Modifier.height(4.dp))
-            Button(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(8.dp),
-                onClick = { /*TODO*/ }
+                    .fillMaxHeight(),
+                horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Text("Организация")
-            }
-            Spacer(modifier = Modifier.height(4.dp))
-            Button(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(8.dp),
-                onClick = { /*TODO*/ }
-            ) {
-                Text("Должность")
-            }
-            Spacer(modifier = Modifier.height(4.dp))
-            ExposedDropdownMenuBox(expanded = false, onExpandedChange = {}) {
+                Text(
+                    "Информация о записи:",
+                    style = TextStyle(fontSize = MaterialTheme.typography.h5.fontSize),
+                    modifier = Modifier.padding(top = 8.dp)
+                )
+                OutlinedTextField(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(8.dp),
+                    value = viewModel.name.value,
+                    onValueChange = { name ->
+                        viewModel.onEvent(AddEditEntryEvent.EnteredName(name))
+                    },
+                    label = { Text("Имя") },
+                    singleLine = true
+                )
+                Spacer(modifier = Modifier.height(4.dp))
+                OutlinedTextField(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(8.dp),
+                    value = viewModel.secondName.value,
+                    onValueChange = { secondName ->
+                        viewModel.onEvent(AddEditEntryEvent.EnteredSecondName(secondName))
+                    },
+                    label = { Text("Фамилия") },
+                    singleLine = true
+                )
+                Spacer(modifier = Modifier.height(4.dp))
+                OutlinedTextField(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(8.dp),
+                    value = viewModel.patronymic.value,
+                    onValueChange = { patronymic ->
+                        viewModel.onEvent(AddEditEntryEvent.EnteredPatronymic(patronymic))
+                    },
+                    label = { Text("Отчество") },
+                    singleLine = true
+                )
+                Spacer(modifier = Modifier.height(4.dp))
 
-            }
-            ExposedDropdownMenuBox(expanded = false, onExpandedChange = {}) {
 
+
+                showDatePicker(
+                    dateOfBirth = viewModel.dateOfBirth.value,
+                    onDateChange = { dateOfBirth ->
+                        viewModel.onEvent(AddEditEntryEvent.EnteredDate(dateOfBirth))
+                    })
+
+
+
+
+
+                Spacer(modifier = Modifier.height(4.dp))
+                OutlinedTextField(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(8.dp),
+                    value = viewModel.address.value,
+                    onValueChange = { address ->
+                        viewModel.onEvent(AddEditEntryEvent.EnteredAddress(address))
+                    },
+                    label = { Text("Адрес") },
+                    singleLine = true
+                )
+                Spacer(modifier = Modifier.height(4.dp))
+                OutlinedTextField(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(8.dp),
+                    value = viewModel.phoneNumber.value,
+                    onValueChange = { phoneNumber ->
+                        viewModel.onEvent(AddEditEntryEvent.EnteredPhoneNumber(phoneNumber))
+                    },
+                    label = { Text("Номер телефона") },
+                    singleLine = true
+                )
+                Spacer(modifier = Modifier.height(4.dp))
+                Button(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(8.dp),
+                    onClick = { /*TODO*/ }
+                ) {
+                    Text("Организация")
+                }
+                Spacer(modifier = Modifier.height(4.dp))
+                Button(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(8.dp),
+                    onClick = { /*TODO*/ }
+                ) {
+                    Text("Должность")
+                }
+                Spacer(modifier = Modifier.height(4.dp))
+                ExposedDropdownMenuBox(expanded = false, onExpandedChange = {}) {
+
+                }
+                ExposedDropdownMenuBox(expanded = false, onExpandedChange = {}) {
+
+                }
             }
         }
     }

@@ -4,11 +4,15 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.*
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import androidx.navigation.navArgument
+import com.example.notebook.feature_notebook.domain.model.InvalidEntryException
 import com.example.notebook.feature_notebook.domain.model.PeopleInfo
+import com.example.notebook.feature_notebook.domain.model.entities.People
 import com.example.notebook.feature_notebook.domain.use_case.NotebookUseCases
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
@@ -20,6 +24,7 @@ class AddEditEntryViewModel @Inject constructor(
     private val _name = mutableStateOf("")
     val name: State<String> = _name
 
+    private var currentPeopleId: Int? = null
 
     private val _secondName = mutableStateOf("")
     val secondName: State<String> = _secondName
@@ -57,6 +62,29 @@ class AddEditEntryViewModel @Inject constructor(
             is AddEditEntryEvent.EnteredSecondName -> {
                 _secondName.value = event.secondName
             }
+            AddEditEntryEvent.SaveEntry -> {
+               viewModelScope.launch {
+                   try{
+                       notebookUseCases.addEntry(
+                           People(
+                              name = name.value,
+                              secondName = secondName.value,
+                              patronymic = secondName.value,
+                               dateOfBirth = dateOfBirth.value,
+                               address = address.value,
+                               phoneNumber = phoneNumber.value,
+                               timestamp = System.currentTimeMillis(),
+                               organizationId = 1,
+                               postId = 1,
+                               relativeId = 1,
+                               familiarId = 1
+                           )
+                       )
+                   } catch (e: InvalidEntryException){
+
+                   }
+               }
+            }
         }
     }
 
@@ -64,6 +92,7 @@ class AddEditEntryViewModel @Inject constructor(
 
     init{
         savedStateHandle.get<PeopleInfo>("entry")?.let { entry ->
+            currentPeopleId = entry.peopleId
             _name.value = entry.name
             _secondName.value = entry.secondName
             _patronymic.value = entry.patronymic
