@@ -110,6 +110,8 @@ dependencies {
 
     implementation "io.github.vanpra.compose-material-dialogs:datetime:0.6.2"
 
-    implementation 'com.google.android.material:material:1.1.0-rc01'
+    implementation "com.google.accompanist:accompanist-insets:0.24.0-alpha"
+    // If using insets-ui
+    implementation "com.google.accompanist:accompanist-insets-ui:0.24.0-alpha"
 
 }

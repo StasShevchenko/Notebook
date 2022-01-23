@@ -11,6 +11,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.draw.shadow
@@ -22,6 +23,7 @@ import com.example.notebook.feature_notebook.domain.model.entities.People
 import com.example.notebook.feature_notebook.presentation.destinations.AddEditEntryScreenDestination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 
+@ExperimentalComposeUiApi
 @ExperimentalMaterialApi
 @Composable
 fun EntryItem(
@@ -31,6 +33,8 @@ fun EntryItem(
     onDeleteEntry: (PeopleInfo) -> Unit,
     entry: PeopleInfo
 ) {
+
+
     var expandedState by remember { mutableStateOf(false) }
 
     Card(

@@ -23,6 +23,8 @@ import com.example.notebook.feature_notebook.presentation.add_edit_entry.compone
 import com.example.notebook.feature_notebook.presentation.destinations.AddEditEntryScreenDestination
 import com.example.notebook.feature_notebook.presentation.entries.EntriesEvent
 import com.example.notebook.feature_notebook.presentation.entries.EntriesViewModel
+import com.google.accompanist.insets.navigationBarsPadding
+import com.google.accompanist.insets.statusBarsPadding
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import kotlinx.coroutines.launch
@@ -42,6 +44,7 @@ fun EntriesScreen(
     val scope = rememberCoroutineScope()
 
     Scaffold(
+        modifier = Modifier.statusBarsPadding().navigationBarsPadding(),
         floatingActionButton = {
             FloatingActionButton(
                 onClick = {

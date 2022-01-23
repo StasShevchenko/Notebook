@@ -12,6 +12,7 @@ import com.example.notebook.feature_notebook.domain.model.entities.People
 import com.example.notebook.feature_notebook.domain.use_case.NotebookUseCases
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -21,10 +22,10 @@ class AddEditEntryViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
+    private var currentPeopleId: Int? = null
+
     private val _name = mutableStateOf("")
     val name: State<String> = _name
-
-    private var currentPeopleId: Int? = null
 
     private val _secondName = mutableStateOf("")
     val secondName: State<String> = _secondName
@@ -40,6 +41,9 @@ class AddEditEntryViewModel @Inject constructor(
 
     private val _address = mutableStateOf<String>("")
     val address: State<String> = _address
+
+    private val _eventFlow = MutableSharedFlow<UiEvent>()
+    val eventFlow = _eventFlow.asSharedFlow()
 
 
     fun onEvent(event: AddEditEntryEvent) {
@@ -80,6 +84,7 @@ class AddEditEntryViewModel @Inject constructor(
                                familiarId = 1
                            )
                        )
+                       _eventFlow.emit(UiEvent.SaveNote)
                    } catch (e: InvalidEntryException){
 
                    }
@@ -102,7 +107,9 @@ class AddEditEntryViewModel @Inject constructor(
         }
     }
 
-
+    sealed class UiEvent{
+        object SaveNote: UiEvent()
+    }
 
 
 }
