@@ -2,6 +2,7 @@ package com.example.notebook.feature_notebook.presentation.entries.components
 
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.*
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
@@ -23,6 +24,7 @@ import com.example.notebook.feature_notebook.domain.model.entities.People
 import com.example.notebook.feature_notebook.presentation.destinations.AddEditEntryScreenDestination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 
+@ExperimentalFoundationApi
 @ExperimentalComposeUiApi
 @ExperimentalMaterialApi
 @Composable

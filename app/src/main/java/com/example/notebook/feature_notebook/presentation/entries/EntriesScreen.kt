@@ -102,7 +102,7 @@ fun EntriesScreen(
                 contentPadding = PaddingValues(top = 4.dp, bottom = 4.dp)
 
             ) {
-                items(state.entries, key = { it.peopleId }) { entry ->
+                items(state.entries, key = {it.peopleId}) { entry ->
 
                     EntryItem(
                         navigator = navigator,

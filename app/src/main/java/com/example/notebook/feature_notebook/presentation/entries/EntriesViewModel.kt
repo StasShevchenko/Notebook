@@ -5,15 +5,13 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.notebook.feature_notebook.domain.model.PeopleInfo
-import com.example.notebook.feature_notebook.domain.model.entities.People
 import com.example.notebook.feature_notebook.domain.model.toPeople
-import com.example.notebook.feature_notebook.domain.use_case.NotebookUseCases
+import com.example.notebook.feature_notebook.domain.use_case.entries_use_case.EntryUseCases
 import com.example.notebook.feature_notebook.domain.util.EntryOrder
 import com.example.notebook.feature_notebook.domain.util.OrderType
 import com.example.notebook.feature_notebook.domain.util.SearchType
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
@@ -21,7 +19,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class EntriesViewModel @Inject constructor(
-    private val notebookUseCases: NotebookUseCases
+    private val entryUseCases: EntryUseCases
 ) : ViewModel() {
 
     private var _isLoading = mutableStateOf(true)
@@ -45,7 +43,7 @@ class EntriesViewModel @Inject constructor(
         when (event) {
             is EntriesEvent.DeleteEntry -> {
                 viewModelScope.launch {
-                    notebookUseCases.deleteEntry(event.entry.peopleId)
+                    entryUseCases.deleteEntry(event.entry.peopleId)
                     recentlyDeletedEntry = event.entry
                 }
             }
@@ -60,7 +58,7 @@ class EntriesViewModel @Inject constructor(
             }
             EntriesEvent.RestoreEntry -> {
                 viewModelScope.launch {
-                    notebookUseCases.addEntry(recentlyDeletedEntry.toPeople() ?: return@launch)
+                    entryUseCases.addEntry(recentlyDeletedEntry.toPeople() ?: return@launch)
                     recentlyDeletedEntry = null
                 }
             }
@@ -81,7 +79,7 @@ class EntriesViewModel @Inject constructor(
             }
             is EntriesEvent.Favourite -> {
                 viewModelScope.launch {
-                    notebookUseCases.addEntry(event.entry.toPeople() ?: return@launch)
+                    entryUseCases.addEntry(event.entry.toPeople() ?: return@launch)
                 }
 
             }
@@ -90,7 +88,7 @@ class EntriesViewModel @Inject constructor(
 
     private fun getEntries(searchType: SearchType, entriesOrder: EntryOrder) {
         getEntriesJob?.cancel()
-        getEntriesJob = notebookUseCases.getEntries(searchType, entriesOrder)
+        getEntriesJob = entryUseCases.getEntries(searchType, entriesOrder)
              .onEach { entries ->
                  _state.value = state.value.copy(
                      entries = entries,

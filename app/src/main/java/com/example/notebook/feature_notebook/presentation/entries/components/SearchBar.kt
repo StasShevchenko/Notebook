@@ -160,9 +160,6 @@ fun SearchBar(
                 }
 
                 Row(
-                    modifier = Modifier.clickable {
-
-                    }
                 ) {
                     IconButton(
                         modifier = Modifier

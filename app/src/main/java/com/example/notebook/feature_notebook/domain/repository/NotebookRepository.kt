@@ -25,7 +25,7 @@ interface NotebookRepository {
     //Все необходимое для работы с информацией об организациях
     //
 
-    fun getOrganizations(): Flow<List<OrganizationInfo>>
+    fun getOrganizations(searchQuery: String): Flow<List<OrganizationInfo>>
 
     suspend fun getOrganizationTypes(): List<OrganizationType>
 

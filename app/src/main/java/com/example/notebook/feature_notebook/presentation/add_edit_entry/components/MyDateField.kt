@@ -2,6 +2,7 @@ package com.example.notebook.feature_notebook.presentation.add_edit_entry.compon
 
 import android.os.Build
 import androidx.annotation.RequiresApi
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -16,6 +17,7 @@ import com.vanpra.composematerialdialogs.datetime.date.datepicker
 import com.vanpra.composematerialdialogs.rememberMaterialDialogState
 import java.time.format.DateTimeFormatter
 
+@ExperimentalFoundationApi
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun MyDateField(

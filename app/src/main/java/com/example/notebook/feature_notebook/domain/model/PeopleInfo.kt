@@ -7,7 +7,7 @@ import kotlin.Exception
 
 @Parcelize
 data class PeopleInfo(
-    val peopleId: Int,
+    val peopleId: Int = 0,
     val name: String,
     val secondName: String,
     val patronymic: String,

@@ -15,6 +15,7 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Save
 import androidx.compose.runtime.*
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
@@ -28,9 +29,14 @@ import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavBackStackEntry
+import androidx.navigation.NavController
+import com.example.notebook.feature_notebook.domain.model.OrganizationInfo
+import com.example.notebook.feature_notebook.domain.model.PeopleInfo
 import com.example.notebook.feature_notebook.presentation.add_edit_entry.AddEditEntryEvent
 import com.example.notebook.feature_notebook.presentation.add_edit_entry.AddEditEntryScreenArguments
 import com.example.notebook.feature_notebook.presentation.add_edit_entry.AddEditEntryViewModel
+import com.example.notebook.feature_notebook.presentation.destinations.OrganizationsScreenDestination
 import com.google.accompanist.insets.*
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
@@ -46,13 +52,19 @@ import java.time.format.DateTimeFormatter
 @Composable
 fun AddEditEntryScreen(
     navigator: DestinationsNavigator,
+    navController: NavController,
     viewModel: AddEditEntryViewModel = hiltViewModel(),
 ) {
-
     val scrollState = rememberScrollState()
     val focusManager = LocalFocusManager.current
 
+    val secondResult = navController.currentBackStackEntry
+        ?.savedStateHandle
+        ?.getLiveData<OrganizationInfo>("organizationInfo")
 
+    secondResult?.value?.let{ organizationInfo ->
+        viewModel.onEvent(AddEditEntryEvent.GotBackResult(organizationInfo))
+    }
 
     LaunchedEffect(key1 = true) {
         viewModel.eventFlow.collectLatest { event ->
@@ -234,9 +246,18 @@ fun AddEditEntryScreen(
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .padding(8.dp),
-                            onClick = { /*TODO*/ }
+                            onClick = { navigator.navigate(OrganizationsScreenDestination(viewModel.organizationId)) }
                         ) {
-                            Text("Организация")
+                            if(viewModel.organizationId != -1){
+                                Column(modifier = Modifier.fillMaxWidth()){
+                                    Text(viewModel.organizationName)
+                                    Text("Тип организации: ${viewModel.organizationType}")
+                                    Text("Количество сотрудников: ${viewModel.workersAmount}")
+                                }
+                            }
+                            else {
+                                Text("Организация")
+                            }
                         }
                         Spacer(modifier = Modifier.height(4.dp))
                         Button(
@@ -260,5 +281,3 @@ fun AddEditEntryScreen(
         }
     }
 }
-
-

@@ -114,4 +114,8 @@ dependencies {
     // If using insets-ui
     implementation "com.google.accompanist:accompanist-insets-ui:0.24.0-alpha"
 
+    implementation 'com.google.code.gson:gson:2.8.9'
+
+    implementation 'androidx.compose.runtime:runtime-livedata:1.0.0-beta01'
+
 }

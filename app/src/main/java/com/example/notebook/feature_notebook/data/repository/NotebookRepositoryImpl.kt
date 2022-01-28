@@ -27,8 +27,8 @@ class NotebookRepositoryImpl(
         dao.deleteEntry(entryId)
     }
 
-    override fun getOrganizations(): Flow<List<OrganizationInfo>> {
-        return dao.getOrganizations()
+    override fun getOrganizations(searchQuery: String): Flow<List<OrganizationInfo>> {
+        return dao.getOrganizations(searchQuery)
     }
 
     override suspend fun getOrganizationTypes(): List<OrganizationType> {

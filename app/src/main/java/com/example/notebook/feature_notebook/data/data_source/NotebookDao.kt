@@ -64,9 +64,9 @@ interface NotebookDao {
     //
     //Все необходимое для работы с информацией об организациях
     //
-    @Query("SELECT organizationId, organizationName, workersAmount, organizationType "+
-        "FROM Organization JOIN OrganizationType USING(typeId)")
-    fun getOrganizations(): Flow<List<OrganizationInfo>>
+    @Query("SELECT organizationId, organizationName, workersAmount, organizationType, typeId "+
+        "FROM Organization JOIN OrganizationType USING(typeId) WHERE organizationName LIKE '%' || :searchQuery || '%' ")
+    fun getOrganizations(searchQuery: String): Flow<List<OrganizationInfo>>
 
     @Query("SELECT * FROM organizationtype")
     suspend fun getOrganizationTypes(): List<OrganizationType>
