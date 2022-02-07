@@ -89,7 +89,7 @@ class AddEditEntryViewModel @Inject constructor(
                             People(
                                 name = name.value,
                                 secondName = secondName.value,
-                                patronymic = secondName.value,
+                                patronymic = patronymic.value,
                                 dateOfBirth = dateOfBirth.value,
                                 address = address.value,
                                 phoneNumber = phoneNumber.value,
