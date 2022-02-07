@@ -27,7 +27,7 @@ interface NotebookDao {
 
     @Query("SELECT peopleId, name, secondName, patronymic, dateOfBirth, address, phoneNumber, timestamp, organizationName, organizationType, workersAmount, postName, familiarType, relativeType, favourite, organizationId, postId, relativeId, familiarId \n" +
             "FROM people\n" +
-            " JOIN (SELECT organizationId, organizationName, workersAmount, organizationType FROM Organization JOIN OrganizationType USING(typeId)) USING (organizationId)\n" +
+            " LEFT OUTER JOIN (SELECT organizationId, organizationName, workersAmount, organizationType FROM Organization JOIN OrganizationType USING(typeId)) USING (organizationId)\n" +
             " JOIN Post USING (postId)\n" +
             " JOIN RELATIONS USING (familiarId)\n" +
             " JOIN Relatives USING(relativeId)\nWHERE (secondName || ' ' || name || ' ' || patronymic) LIKE '%' || :searchQuery || '%' ")
@@ -44,7 +44,7 @@ interface NotebookDao {
 
     @Query("SELECT peopleId, name, secondName, patronymic, dateOfBirth, address, phoneNumber, timestamp, organizationName, organizationType, workersAmount, postName, familiarType, relativeType, favourite, organizationId, postId, relativeId, familiarId\n" +
             "FROM people\n" +
-            " JOIN (SELECT organizationId, organizationName, workersAmount, organizationType FROM Organization JOIN OrganizationType USING(typeId)) USING (organizationId)\n" +
+            " LEFT OUTER  JOIN (SELECT organizationId, organizationName, workersAmount, organizationType FROM Organization JOIN OrganizationType USING(typeId)) USING (organizationId)\n" +
             " JOIN Post USING (postId)\n" +
             " JOIN RELATIONS USING (familiarId)\n" +
             " JOIN Relatives USING(relativeId)\nWHERE postName LIKE '%' || :searchQuery || '%' ")

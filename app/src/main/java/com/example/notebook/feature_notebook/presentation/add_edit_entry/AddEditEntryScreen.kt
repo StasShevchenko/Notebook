@@ -248,7 +248,7 @@ fun AddEditEntryScreen(
                                 .padding(8.dp),
                             onClick = { navigator.navigate(OrganizationsScreenDestination(viewModel.organizationId)) }
                         ) {
-                            if(viewModel.organizationId != -1){
+                            if(viewModel.organizationName != ""){
                                 Column(modifier = Modifier.fillMaxWidth()){
                                     Text(viewModel.organizationName)
                                     Text("Тип организации: ${viewModel.organizationType}")

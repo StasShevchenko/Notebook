@@ -67,7 +67,7 @@ fun EntryItem(
                             .padding(start = 8.dp)
                     ) {
                         Text(
-                            modifier = Modifier.padding(top=4.dp),
+                            modifier = Modifier.padding(top = 4.dp),
                             text = "${entry.secondName} ${entry.name} ${entry.patronymic}",
                             style = TextStyle(
                                 color = MaterialTheme.colors.onSurface,
@@ -77,8 +77,10 @@ fun EntryItem(
                         )
                         Spacer(modifier = Modifier.height(4.dp))
                         Row() {
-                            Text(text = entry.organizationName)
-                            Spacer(modifier = Modifier.width(8.dp))
+                            if (entry.organizationName != null) {
+                                Text(text = entry.organizationName)
+                                Spacer(modifier = Modifier.width(8.dp))
+                            }
                             Text(text = entry.postName)
                         }
                         Spacer(modifier = Modifier.height(4.dp))
@@ -121,12 +123,14 @@ fun EntryItem(
                     Spacer(modifier = Modifier.height(4.dp))
                     Text(text = "Дата рождения: ${entry.dateOfBirth}")
                     Spacer(modifier = Modifier.height(4.dp))
-                    Divider()
-                    Spacer(modifier = Modifier.height(4.dp))
-                    Text(text = "Количество сотрудников в организации: ${entry.workersAmount}")
-                    Spacer(modifier = Modifier.height(4.dp))
-                    Text(text = "Тип организации: ${entry.organizationType}")
-                    Divider()
+                    if (entry.organizationName != null) {
+                        Divider()
+                        Spacer(modifier = Modifier.height(4.dp))
+                        Text(text = "Количество сотрудников в организации: ${entry.workersAmount}")
+                        Spacer(modifier = Modifier.height(4.dp))
+                        Text(text = "Тип организации: ${entry.organizationType}")
+                        Divider()
+                    }
                     if (entry.relativeType != "") {
                         Spacer(modifier = Modifier.height(4.dp))
                         Text(text = "Родство: ${entry.relativeType}")
@@ -134,41 +138,44 @@ fun EntryItem(
                     }
                     if (entry.familiarType != "") {
                         Spacer(modifier = Modifier.height(4.dp))
-                        Text(text = "Отношения: ${entry.familiarType}", modifier = Modifier.padding(bottom = 8.dp))
+                        Text(
+                            text = "Отношения: ${entry.familiarType}",
+                            modifier = Modifier.padding(bottom = 8.dp)
+                        )
                     }
-                    if(entry.familiarType != "" || entry.relativeType != "") {
+                    if (entry.familiarType != "" || entry.relativeType != "") {
                         Divider()
                     }
-                        Row() {
-                            IconButton(
-                                modifier = Modifier
-                                    .padding(4.dp)
-                                    .size(30.dp),
-                                onClick =  {
+                    Row() {
+                        IconButton(
+                            modifier = Modifier
+                                .padding(4.dp)
+                                .size(30.dp),
+                            onClick = {
                                 navigator.navigate(AddEditEntryScreenDestination(entry))
-                                },
-                            ) {
-                                Icon(
-                                    imageVector = Icons.Default.Edit,
-                                    contentDescription = "",
-                                    tint = MaterialTheme.colors.onSurface
-                                    )
-                            }
-                            IconButton(
-                                modifier = Modifier
-                                    .padding(4.dp)
-                                    .size(30.dp),
-                                onClick = {
-                                onDeleteEntry(entry)
-                                },
-                            ) {
-                                Icon(
-                                    imageVector = Icons.Default.Delete,
-                                    contentDescription = "",
-                                    tint = MaterialTheme.colors.onSurface
-                                )
-                            }
+                            },
+                        ) {
+                            Icon(
+                                imageVector = Icons.Default.Edit,
+                                contentDescription = "",
+                                tint = MaterialTheme.colors.onSurface
+                            )
                         }
+                        IconButton(
+                            modifier = Modifier
+                                .padding(4.dp)
+                                .size(30.dp),
+                            onClick = {
+                                onDeleteEntry(entry)
+                            },
+                        ) {
+                            Icon(
+                                imageVector = Icons.Default.Delete,
+                                contentDescription = "",
+                                tint = MaterialTheme.colors.onSurface
+                            )
+                        }
+                    }
 
                 }
             }
@@ -177,40 +184,6 @@ fun EntryItem(
     }
 
 }
-
-
-/*
-@ExperimentalMaterialApi
-@Preview
-@Composable
-fun EntryItemPreview() {
-    EntryItem(
-        onFavouriteChanged = {},
-        entry = PeopleInfo(
-            1,
-            "Иго",
-            "Васи",
-            "Влади",
-            "23.04.2002",
-            "Ул. Преображенская",
-            "8928323892389",
-            3232,
-            "GOD",
-            "Образовательная",
-            540,
-            "Директор",
-            "",
-            "",
-            true,
-            1,
-            1,
-            1,
-            1,
-        )
-    )
-
-}
-*/
 
 
 

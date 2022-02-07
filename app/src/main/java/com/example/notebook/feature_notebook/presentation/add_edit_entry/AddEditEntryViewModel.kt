@@ -45,16 +45,16 @@ class AddEditEntryViewModel @Inject constructor(
     private val _address = mutableStateOf<String>("")
     val address: State<String> = _address
 
-    public var organizationId = -1
+     var organizationId = -1
         private set
 
-    public var organizationName = ""
+     var organizationName = ""
         private set
 
-    public var organizationType = ""
+     var organizationType = ""
         private set
 
-    public var workersAmount = 0
+     var workersAmount = 0
         private set
 
     private val _eventFlow = MutableSharedFlow<UiEvent>()
@@ -127,9 +127,9 @@ class AddEditEntryViewModel @Inject constructor(
             _address.value = entry.address
             _phoneNumber.value = entry.phoneNumber
             organizationId = entry.organizationId
-            organizationName = entry.organizationName
-            organizationType = entry.organizationType
-            workersAmount = entry.workersAmount
+            organizationName = entry.organizationName ?: ""
+            organizationType = entry.organizationType ?: ""
+            workersAmount = entry.workersAmount ?: 0
         }
 
     }
