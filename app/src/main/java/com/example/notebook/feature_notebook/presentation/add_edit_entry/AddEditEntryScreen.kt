@@ -260,14 +260,13 @@ fun AddEditEntryScreen(
                             }
                         }
                         Spacer(modifier = Modifier.height(4.dp))
-                        Button(
+                        OutlinedTextField(
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .padding(8.dp),
-                            onClick = { /*TODO*/ }
-                        ) {
-                            Text("Должность")
-                        }
+                            value = "",
+                            onValueChange = {}
+                        )
                         Spacer(modifier = Modifier.height(4.dp))
                         ExposedDropdownMenuBox(expanded = false, onExpandedChange = {}) {
 
