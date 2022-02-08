@@ -117,6 +117,8 @@ fun AddEditEntryScreen(
                             modifier = Modifier.padding(top = 8.dp)
                         )
 
+
+
                         OutlinedTextField(
                             modifier = Modifier
                                 .fillMaxWidth()
@@ -268,12 +270,13 @@ fun AddEditEntryScreen(
                             onValueChange = {}
                         )
                         Spacer(modifier = Modifier.height(4.dp))
-                        ExposedDropdownMenuBox(expanded = false, onExpandedChange = {}) {
-
-                        }
-                        ExposedDropdownMenuBox(expanded = false, onExpandedChange = {}) {
-
-                        }
+                        FamiliarChoiceField(
+                            contentList = viewModel.relationsList,
+                            onItemChosen = { familiarType ->
+                                viewModel.onEvent(AddEditEntryEvent.EnteredFamiliarType(familiarType))
+                            },
+                            chosenItem = viewModel.familiarType.value
+                        )
                     }
                 }
             }

@@ -9,6 +9,7 @@ import com.example.notebook.feature_notebook.domain.use_case.entries_use_case.Ad
 import com.example.notebook.feature_notebook.domain.use_case.entries_use_case.DeleteEntry
 import com.example.notebook.feature_notebook.domain.use_case.entries_use_case.GetEntries
 import com.example.notebook.feature_notebook.domain.use_case.entries_use_case.EntryUseCases
+import com.example.notebook.feature_notebook.domain.use_case.familiar_type_use_case.GetFamiliarTypes
 import com.example.notebook.feature_notebook.domain.use_case.organizations_use_case.*
 import dagger.Module
 import dagger.Provides
@@ -59,5 +60,11 @@ object AppModule {
             getOrganizationTypes = GetOrganizationTypes(repository),
             getOrganization = GetOrganization(repository)
         )
+    }
+
+    @Provides
+    @Singleton
+    fun provideGetFamiliarTypesUseCase(repository: NotebookRepository): GetFamiliarTypes{
+        return GetFamiliarTypes(repository)
     }
 }
