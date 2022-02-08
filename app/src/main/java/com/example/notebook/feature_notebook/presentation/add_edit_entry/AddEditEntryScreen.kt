@@ -62,7 +62,7 @@ fun AddEditEntryScreen(
         ?.savedStateHandle
         ?.getLiveData<OrganizationInfo>("organizationInfo")
 
-    secondResult?.value?.let{ organizationInfo ->
+    secondResult?.value?.let { organizationInfo ->
         viewModel.onEvent(AddEditEntryEvent.GotBackResult(organizationInfo))
     }
 
@@ -77,24 +77,24 @@ fun AddEditEntryScreen(
     }
 
     ProvideWindowInsets(windowInsetsAnimationsEnabled = true) {
-    Scaffold(
-        modifier = Modifier.statusBarsPadding(),
-        floatingActionButton = {
-            FloatingActionButton(
-                modifier = Modifier.navigationBarsWithImePadding(),
-                onClick = {
-                    viewModel.onEvent((AddEditEntryEvent.SaveEntry))
-                },
-                backgroundColor = MaterialTheme.colors.primary
-            ) {
-                Icon(imageVector = Icons.Default.Save, contentDescription = "")
-            }
-        },
-    ) {
-        Surface(
-            color = MaterialTheme.colors.surface,
-            modifier = Modifier.fillMaxSize()
+        Scaffold(
+            modifier = Modifier.statusBarsPadding().navigationBarsPadding(),
+            floatingActionButton = {
+                FloatingActionButton(
+                    modifier = Modifier.navigationBarsWithImePadding(),
+                    onClick = {
+                        viewModel.onEvent((AddEditEntryEvent.SaveEntry))
+                    },
+                    backgroundColor = MaterialTheme.colors.primary
+                ) {
+                    Icon(imageVector = Icons.Default.Save, contentDescription = "")
+                }
+            },
         ) {
+            Surface(
+                color = MaterialTheme.colors.surface,
+                modifier = Modifier.fillMaxSize()
+            ) {
 
                 Column(
                     modifier = Modifier
@@ -106,8 +106,7 @@ fun AddEditEntryScreen(
                     Column(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .fillMaxHeight()
-                            ,
+                            .fillMaxHeight(),
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
 
@@ -250,14 +249,13 @@ fun AddEditEntryScreen(
                                 .padding(8.dp),
                             onClick = { navigator.navigate(OrganizationsScreenDestination(viewModel.organizationId)) }
                         ) {
-                            if(viewModel.organizationName != ""){
-                                Column(modifier = Modifier.fillMaxWidth()){
+                            if (viewModel.organizationName != "") {
+                                Column(modifier = Modifier.fillMaxWidth()) {
                                     Text(viewModel.organizationName)
                                     Text("Тип организации: ${viewModel.organizationType}")
                                     Text("Количество сотрудников: ${viewModel.workersAmount}")
                                 }
-                            }
-                            else {
+                            } else {
                                 Text("Организация")
                             }
                         }
@@ -276,6 +274,14 @@ fun AddEditEntryScreen(
                                 viewModel.onEvent(AddEditEntryEvent.EnteredFamiliarType(familiarType))
                             },
                             chosenItem = viewModel.familiarType.value
+                        )
+                        Spacer(modifier = Modifier.height(4.dp))
+                        RelativeChoiceField(
+                            contentList = viewModel.relativesList,
+                            onItemChosen = { relativeType ->
+                                viewModel.onEvent(AddEditEntryEvent.EnteredRelativeType(relativeType))
+                            },
+                            chosenItem = viewModel.relativeType.value
                         )
                     }
                 }

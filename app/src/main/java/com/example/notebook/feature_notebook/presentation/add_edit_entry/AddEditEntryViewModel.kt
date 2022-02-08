@@ -10,9 +10,11 @@ import com.example.notebook.feature_notebook.domain.model.OrganizationInfo
 import com.example.notebook.feature_notebook.domain.model.PeopleInfo
 import com.example.notebook.feature_notebook.domain.model.entities.People
 import com.example.notebook.feature_notebook.domain.model.entities.Relations
+import com.example.notebook.feature_notebook.domain.model.entities.Relatives
 import com.example.notebook.feature_notebook.domain.use_case.entries_use_case.EntryUseCases
 import com.example.notebook.feature_notebook.domain.use_case.familiar_type_use_case.GetFamiliarTypes
 import com.example.notebook.feature_notebook.domain.use_case.organizations_use_case.OrganizationUseCases
+import com.example.notebook.feature_notebook.domain.use_case.relative_type_use_case.GetRelativeTypes
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
@@ -23,7 +25,7 @@ import javax.inject.Inject
 class AddEditEntryViewModel @Inject constructor(
     private val entryUseCases: EntryUseCases,
     private val getFamiliarTypesUseCase: GetFamiliarTypes,
-    private val organizationUseCases: OrganizationUseCases,
+    private val getRelativeTypes: GetRelativeTypes,
     private var savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
@@ -35,6 +37,12 @@ class AddEditEntryViewModel @Inject constructor(
 
     private val _familiarType = mutableStateOf<Relations>(Relations(-1, ""))
     val familiarType: State<Relations> = _familiarType
+
+    var relativesList: List<Relatives> = emptyList()
+    private set
+
+    private val _relativeType = mutableStateOf<Relatives>(Relatives(-1, ""))
+    val relativeType: State<Relatives> = _relativeType
 
     private val _name = mutableStateOf("")
     val name: State<String> = _name
@@ -105,7 +113,7 @@ class AddEditEntryViewModel @Inject constructor(
                                 timestamp = System.currentTimeMillis(),
                                 organizationId = organizationId,
                                 postId = 1,
-                                relativeId = 1,
+                                relativeId = relativeType.value.relativeId,
                                 familiarId = familiarType.value.familiarId,
                                 peopleId = currentPeopleId
                             )
@@ -125,6 +133,9 @@ class AddEditEntryViewModel @Inject constructor(
             is AddEditEntryEvent.EnteredFamiliarType -> {
                 _familiarType.value = event.familiarType
             }
+            is AddEditEntryEvent.EnteredRelativeType -> {
+                _relativeType.value = event.relativeType
+            }
         }
     }
 
@@ -139,6 +150,7 @@ class AddEditEntryViewModel @Inject constructor(
             _address.value = entry.address
             _phoneNumber.value = entry.phoneNumber
             _familiarType.value = Relations(entry.familiarId, entry.familiarType)
+            _relativeType.value = Relatives(entry.relativeId, entry.relativeType)
             organizationId = entry.organizationId
             organizationName = entry.organizationName ?: ""
             organizationType = entry.organizationType ?: ""
@@ -146,6 +158,9 @@ class AddEditEntryViewModel @Inject constructor(
         }
         viewModelScope.launch {
             relationsList = getFamiliarTypesUseCase()
+        }
+        viewModelScope.launch {
+            relativesList = getRelativeTypes()
         }
 
     }

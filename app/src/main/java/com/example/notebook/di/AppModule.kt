@@ -11,6 +11,7 @@ import com.example.notebook.feature_notebook.domain.use_case.entries_use_case.Ge
 import com.example.notebook.feature_notebook.domain.use_case.entries_use_case.EntryUseCases
 import com.example.notebook.feature_notebook.domain.use_case.familiar_type_use_case.GetFamiliarTypes
 import com.example.notebook.feature_notebook.domain.use_case.organizations_use_case.*
+import com.example.notebook.feature_notebook.domain.use_case.relative_type_use_case.GetRelativeTypes
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -66,5 +67,11 @@ object AppModule {
     @Singleton
     fun provideGetFamiliarTypesUseCase(repository: NotebookRepository): GetFamiliarTypes{
         return GetFamiliarTypes(repository)
+    }
+
+    @Provides
+    @Singleton
+    fun provideGetRelativeTypesUseCase(repository: NotebookRepository): GetRelativeTypes{
+        return GetRelativeTypes(repository)
     }
 }
