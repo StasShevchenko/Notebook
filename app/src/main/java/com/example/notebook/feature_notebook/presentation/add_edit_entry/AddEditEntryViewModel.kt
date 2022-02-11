@@ -201,7 +201,7 @@ class AddEditEntryViewModel @Inject constructor(
             _phoneNumber.value = entry.phoneNumber
             _familiarType.value = Relations(entry.familiarId, entry.familiarType)
             _relativeType.value = Relatives(entry.relativeId, entry.relativeType)
-            _postName.value = entry.postName
+            _postName.value = entry.postName ?: ""
             organizationId = entry.organizationId
             organizationName = entry.organizationName ?: ""
             organizationType = entry.organizationType ?: ""

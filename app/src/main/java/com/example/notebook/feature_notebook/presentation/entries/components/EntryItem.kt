@@ -58,7 +58,7 @@ fun EntryItem(
         Column() {
             Surface(color = MaterialTheme.colors.primary) {
                 Row(
-                    modifier = Modifier.padding(),
+                    modifier = Modifier.heightIn(min = 60.dp),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Column(
@@ -81,7 +81,9 @@ fun EntryItem(
                                 Text(text = entry.organizationName)
                                 Spacer(modifier = Modifier.width(8.dp))
                             }
-                            Text(text = entry.postName)
+                            if (entry.postName != null) {
+                                Text(text = entry.postName)
+                            }
                         }
                         Spacer(modifier = Modifier.height(4.dp))
                     }

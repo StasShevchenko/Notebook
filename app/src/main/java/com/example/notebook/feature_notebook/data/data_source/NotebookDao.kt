@@ -28,7 +28,7 @@ interface NotebookDao {
     @Query("SELECT peopleId, name, secondName, patronymic, dateOfBirth, address, phoneNumber, timestamp, organizationName, organizationType, workersAmount, postName, familiarType, relativeType, favourite, organizationId, postId, relativeId, familiarId \n" +
             "FROM people\n" +
             " LEFT OUTER JOIN (SELECT organizationId, organizationName, workersAmount, organizationType FROM Organization JOIN OrganizationType USING(typeId)) USING (organizationId)\n" +
-            " JOIN Post USING (postId)\n" +
+            " LEFT OUTER JOIN Post USING (postId)\n" +
             " JOIN RELATIONS USING (familiarId)\n" +
             " JOIN Relatives USING(relativeId)\nWHERE (secondName || ' ' || name || ' ' || patronymic) LIKE '%' || :searchQuery || '%' ")
     fun getEntriesByName(searchQuery: String): Flow<List<PeopleInfo>>
@@ -36,7 +36,7 @@ interface NotebookDao {
     @Query("SELECT peopleId, name, secondName, patronymic, dateOfBirth, address, phoneNumber, timestamp, organizationName, organizationType, workersAmount, postName, familiarType, relativeType, favourite, organizationId, postId, relativeId, familiarId\n" +
             "FROM people\n" +
             " JOIN (SELECT organizationId, organizationName, workersAmount, organizationType FROM Organization JOIN OrganizationType USING(typeId)) USING (organizationId)\n" +
-            " JOIN Post USING (postId)\n" +
+            " LEFT OUTER JOIN Post USING (postId)\n" +
             " JOIN RELATIONS USING (familiarId)\n" +
             " JOIN Relatives USING(relativeId)\nWHERE organizationName LIKE '%' || :searchQuery || '%' ")
     fun getEntriesByOrganization(searchQuery: String): Flow<List<PeopleInfo>>
@@ -45,7 +45,7 @@ interface NotebookDao {
     @Query("SELECT peopleId, name, secondName, patronymic, dateOfBirth, address, phoneNumber, timestamp, organizationName, organizationType, workersAmount, postName, familiarType, relativeType, favourite, organizationId, postId, relativeId, familiarId\n" +
             "FROM people\n" +
             " LEFT OUTER  JOIN (SELECT organizationId, organizationName, workersAmount, organizationType FROM Organization JOIN OrganizationType USING(typeId)) USING (organizationId)\n" +
-            " JOIN Post USING (postId)\n" +
+            " LEFT OUTER JOIN Post USING (postId)\n" +
             " JOIN RELATIONS USING (familiarId)\n" +
             " JOIN Relatives USING(relativeId)\nWHERE postName LIKE '%' || :searchQuery || '%' ")
     fun getEntriesByPost(searchQuery: String): Flow<List<PeopleInfo>>

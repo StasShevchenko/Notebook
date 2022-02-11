@@ -18,7 +18,7 @@ data class PeopleInfo(
     val organizationName: String? = null,
     val organizationType: String? = null,
     val workersAmount: Int? = null,
-    val postName: String,
+    val postName: String? = null,
     val familiarType: String,
     val relativeType: String,
     val favourite: Boolean,
