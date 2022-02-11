@@ -38,9 +38,9 @@ interface NotebookRepository {
     //
     //Все необходимое для работы с должностями
     //
-    fun getPosts(): Flow<List<Post>>
+    fun getPosts(searchQuery: String): Flow<List<Post>>
 
-    suspend fun insertPost(post: Post)
+    suspend fun insertPost(post: Post): Long
 
     suspend fun getPostById(postId: Int): Post
 

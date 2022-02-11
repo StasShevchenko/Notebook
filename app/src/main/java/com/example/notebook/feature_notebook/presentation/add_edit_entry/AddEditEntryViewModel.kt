@@ -6,18 +6,22 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.notebook.feature_notebook.domain.model.InvalidEntryException
-import com.example.notebook.feature_notebook.domain.model.OrganizationInfo
 import com.example.notebook.feature_notebook.domain.model.PeopleInfo
 import com.example.notebook.feature_notebook.domain.model.entities.People
+import com.example.notebook.feature_notebook.domain.model.entities.Post
 import com.example.notebook.feature_notebook.domain.model.entities.Relations
 import com.example.notebook.feature_notebook.domain.model.entities.Relatives
 import com.example.notebook.feature_notebook.domain.use_case.entries_use_case.EntryUseCases
 import com.example.notebook.feature_notebook.domain.use_case.familiar_type_use_case.GetFamiliarTypes
-import com.example.notebook.feature_notebook.domain.use_case.organizations_use_case.OrganizationUseCases
+import com.example.notebook.feature_notebook.domain.use_case.posts_use_case.PostsUseCases
 import com.example.notebook.feature_notebook.domain.use_case.relative_type_use_case.GetRelativeTypes
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -26,23 +30,35 @@ class AddEditEntryViewModel @Inject constructor(
     private val entryUseCases: EntryUseCases,
     private val getFamiliarTypesUseCase: GetFamiliarTypes,
     private val getRelativeTypes: GetRelativeTypes,
-    private var savedStateHandle: SavedStateHandle
+    private val postsUseCases: PostsUseCases,
+    savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
-     var currentPeopleId: Int? = null
+    var currentPeopleId: Int? = null
         private set
 
+    private var getPostsJob: Job? = null
+
     var relationsList: List<Relations> = emptyList()
-    private set
+        private set
 
     private val _familiarType = mutableStateOf<Relations>(Relations(-1, ""))
     val familiarType: State<Relations> = _familiarType
 
     var relativesList: List<Relatives> = emptyList()
-    private set
+        private set
 
     private val _relativeType = mutableStateOf<Relatives>(Relatives(-1, ""))
     val relativeType: State<Relatives> = _relativeType
+
+    private val _currentPost = mutableStateOf<Post>(Post(-1, "", 0))
+    val currentPost: State<Post> = _currentPost
+
+    private val _postName = mutableStateOf("")
+    val postName: State<String> = _postName
+
+    private val _posts = mutableStateOf<List<Post>>(emptyList<Post>())
+    val posts: State<List<Post>> = _posts
 
     private val _name = mutableStateOf("")
     val name: State<String> = _name
@@ -62,16 +78,16 @@ class AddEditEntryViewModel @Inject constructor(
     private val _address = mutableStateOf<String>("")
     val address: State<String> = _address
 
-     var organizationId = -1
+    var organizationId = -1
         private set
 
-     var organizationName = ""
+    var organizationName = ""
         private set
 
-     var organizationType = ""
+    var organizationType = ""
         private set
 
-     var workersAmount = 0
+    var workersAmount = 0
         private set
 
     private val _eventFlow = MutableSharedFlow<UiEvent>()
@@ -102,23 +118,23 @@ class AddEditEntryViewModel @Inject constructor(
             AddEditEntryEvent.SaveEntry -> {
                 viewModelScope.launch {
                     try {
-                        entryUseCases.addEntry(
-                            People(
-                                name = name.value,
-                                secondName = secondName.value,
-                                patronymic = patronymic.value,
-                                dateOfBirth = dateOfBirth.value,
-                                address = address.value,
-                                phoneNumber = phoneNumber.value,
-                                timestamp = System.currentTimeMillis(),
-                                organizationId = organizationId,
-                                postId = 1,
-                                relativeId = relativeType.value.relativeId,
-                                familiarId = familiarType.value.familiarId,
-                                peopleId = currentPeopleId
-                            )
-                        )
-                        _eventFlow.emit(UiEvent.SaveNote)
+                        //Проверка на существование введенной должности в БД и
+                        // и её добавление при отсутствии
+                        val existingPost = posts.value.find {
+                            it.postName == postName.value
+                        }
+                        if (existingPost != null) {
+                            _currentPost.value = existingPost
+                            saveEntry(_currentPost.value.postId)
+                        } else if (postName.value.isNotBlank()) {
+                            val id: Long = postsUseCases.addPost(Post(0, postName.value, 0))
+                            getPosts("*")
+                           saveEntry(id.toInt())
+                        } else {
+                            _currentPost.value = Post(-1, "", 0)
+                            saveEntry(-1)
+                        }
+
                     } catch (e: InvalidEntryException) {
 
                     }
@@ -130,13 +146,47 @@ class AddEditEntryViewModel @Inject constructor(
                 organizationType = event.organizationInfo.organizationType
                 workersAmount = event.organizationInfo.workersAmount
             }
-            is AddEditEntryEvent.EnteredFamiliarType -> {
+            is AddEditEntryEvent.ChosenFamiliarType -> {
                 _familiarType.value = event.familiarType
             }
-            is AddEditEntryEvent.EnteredRelativeType -> {
+            is AddEditEntryEvent.ChosenRelativeType -> {
                 _relativeType.value = event.relativeType
             }
+            is AddEditEntryEvent.ChosenPost -> {
+                _currentPost.value = event.post
+                _postName.value = event.post.postName
+                getPosts(postName.value)
+            }
+            is AddEditEntryEvent.EnteredPostName -> {
+                _postName.value = event.searchQuery
+                getPosts(event.searchQuery)
+            }
+            is AddEditEntryEvent.DeletedPost -> {
+                viewModelScope.launch {
+                    postsUseCases.deletePost(event.post)
+                }
+            }
         }
+    }
+
+    private suspend fun saveEntry(postId: Int){
+        entryUseCases.addEntry(
+            People(
+                name = name.value,
+                secondName = secondName.value,
+                patronymic = patronymic.value,
+                dateOfBirth = dateOfBirth.value,
+                address = address.value,
+                phoneNumber = phoneNumber.value,
+                timestamp = System.currentTimeMillis(),
+                organizationId = organizationId,
+                postId = postId,
+                relativeId = relativeType.value.relativeId,
+                familiarId = familiarType.value.familiarId,
+                peopleId = currentPeopleId
+            )
+        )
+        _eventFlow.emit(UiEvent.SaveNote)
     }
 
 
@@ -151,11 +201,13 @@ class AddEditEntryViewModel @Inject constructor(
             _phoneNumber.value = entry.phoneNumber
             _familiarType.value = Relations(entry.familiarId, entry.familiarType)
             _relativeType.value = Relatives(entry.relativeId, entry.relativeType)
+            _postName.value = entry.postName
             organizationId = entry.organizationId
             organizationName = entry.organizationName ?: ""
             organizationType = entry.organizationType ?: ""
             workersAmount = entry.workersAmount ?: 0
         }
+        getPosts(_postName.value)
         viewModelScope.launch {
             relationsList = getFamiliarTypesUseCase()
         }
@@ -165,6 +217,13 @@ class AddEditEntryViewModel @Inject constructor(
 
     }
 
+    private fun getPosts(searchQuery: String) {
+        getPostsJob?.cancel()
+        getPostsJob = postsUseCases.getPosts(searchQuery)
+            .onEach { posts ->
+                this._posts.value = posts
+            }.launchIn(viewModelScope)
+    }
 
     sealed class UiEvent {
         object SaveNote : UiEvent()

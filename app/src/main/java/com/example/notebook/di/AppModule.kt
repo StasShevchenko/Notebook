@@ -4,6 +4,7 @@ import android.app.Application
 import androidx.room.Room
 import com.example.notebook.feature_notebook.data.data_source.NotebookDatabase
 import com.example.notebook.feature_notebook.data.repository.NotebookRepositoryImpl
+import com.example.notebook.feature_notebook.domain.model.entities.Post
 import com.example.notebook.feature_notebook.domain.repository.NotebookRepository
 import com.example.notebook.feature_notebook.domain.use_case.entries_use_case.AddEntry
 import com.example.notebook.feature_notebook.domain.use_case.entries_use_case.DeleteEntry
@@ -11,6 +12,10 @@ import com.example.notebook.feature_notebook.domain.use_case.entries_use_case.Ge
 import com.example.notebook.feature_notebook.domain.use_case.entries_use_case.EntryUseCases
 import com.example.notebook.feature_notebook.domain.use_case.familiar_type_use_case.GetFamiliarTypes
 import com.example.notebook.feature_notebook.domain.use_case.organizations_use_case.*
+import com.example.notebook.feature_notebook.domain.use_case.posts_use_case.AddPost
+import com.example.notebook.feature_notebook.domain.use_case.posts_use_case.DeletePost
+import com.example.notebook.feature_notebook.domain.use_case.posts_use_case.GetPosts
+import com.example.notebook.feature_notebook.domain.use_case.posts_use_case.PostsUseCases
 import com.example.notebook.feature_notebook.domain.use_case.relative_type_use_case.GetRelativeTypes
 import dagger.Module
 import dagger.Provides
@@ -60,6 +65,16 @@ object AppModule {
             getOrganizations = GetOrganizations(repository),
             getOrganizationTypes = GetOrganizationTypes(repository),
             getOrganization = GetOrganization(repository)
+        )
+    }
+
+    @Provides
+    @Singleton
+    fun providePostUseCases(repository: NotebookRepository): PostsUseCases{
+        return PostsUseCases(
+            addPost = AddPost(repository),
+            deletePost = DeletePost(repository),
+            getPosts = GetPosts(repository)
         )
     }
 

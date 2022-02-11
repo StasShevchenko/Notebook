@@ -83,11 +83,11 @@ interface NotebookDao {
     //
     //Все необходимое для работы с должностями
     //
-    @Query("SELECT * FROM Post")
-    fun getPosts(): Flow<List<Post>>
+    @Query("SELECT * FROM Post WHERE postName LIKE '%' || :searchQuery || '%'")
+    fun getPosts(searchQuery: String): Flow<List<Post>>
 
     @Insert
-    suspend fun insertPost(post: Post)
+    suspend fun insertPost(post: Post): Long
 
     @Query("SELECT * FROM Post WHERE postId = :postId")
     suspend fun getPostById(postId: Int): Post

@@ -1,13 +1,8 @@
 package com.example.notebook.feature_notebook.presentation.add_edit_entry.components
 
 import android.os.Build
-import android.widget.DatePicker
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.*
-import androidx.compose.foundation.gestures.Orientation
-import androidx.compose.foundation.gestures.ScrollableState
-import androidx.compose.foundation.gestures.animateScrollBy
-import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
@@ -15,13 +10,10 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Save
 import androidx.compose.runtime.*
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.*
-import androidx.compose.ui.layout.onGloballyPositioned
-import androidx.compose.ui.layout.positionInRoot
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.ImeAction
@@ -29,10 +21,8 @@ import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavController
 import com.example.notebook.feature_notebook.domain.model.OrganizationInfo
-import com.example.notebook.feature_notebook.domain.model.PeopleInfo
 import com.example.notebook.feature_notebook.presentation.add_edit_entry.AddEditEntryEvent
 import com.example.notebook.feature_notebook.presentation.add_edit_entry.AddEditEntryScreenArguments
 import com.example.notebook.feature_notebook.presentation.add_edit_entry.AddEditEntryViewModel
@@ -41,8 +31,6 @@ import com.google.accompanist.insets.*
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.launch
-import java.time.format.DateTimeFormatter
 
 @ExperimentalFoundationApi
 @ExperimentalComposeUiApi
@@ -78,7 +66,9 @@ fun AddEditEntryScreen(
 
     ProvideWindowInsets(windowInsetsAnimationsEnabled = true) {
         Scaffold(
-            modifier = Modifier.statusBarsPadding().navigationBarsPadding(),
+            modifier = Modifier
+                .statusBarsPadding()
+               ,
             floatingActionButton = {
                 FloatingActionButton(
                     modifier = Modifier.navigationBarsWithImePadding(),
@@ -99,7 +89,7 @@ fun AddEditEntryScreen(
                 Column(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .imePadding()
+                        .navigationBarsWithImePadding()
                         .verticalScroll(scrollState, true),
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
@@ -260,18 +250,24 @@ fun AddEditEntryScreen(
                             }
                         }
                         Spacer(modifier = Modifier.height(4.dp))
-                        OutlinedTextField(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(8.dp),
-                            value = "",
-                            onValueChange = {}
+                        PostChoiceField(
+                            contentList = viewModel.posts.value,
+                            value = viewModel.postName.value,
+                            onValueChange = { postName ->
+                                viewModel.onEvent(AddEditEntryEvent.EnteredPostName(postName))
+                            },
+                            onItemChosen = { post ->
+                                viewModel.onEvent(AddEditEntryEvent.ChosenPost(post))
+                            },
+                            onItemDelete = { post ->
+                                viewModel.onEvent(AddEditEntryEvent.DeletedPost(post))
+                            }
                         )
                         Spacer(modifier = Modifier.height(4.dp))
                         FamiliarChoiceField(
                             contentList = viewModel.relationsList,
                             onItemChosen = { familiarType ->
-                                viewModel.onEvent(AddEditEntryEvent.EnteredFamiliarType(familiarType))
+                                viewModel.onEvent(AddEditEntryEvent.ChosenFamiliarType(familiarType))
                             },
                             chosenItem = viewModel.familiarType.value
                         )
@@ -279,7 +275,7 @@ fun AddEditEntryScreen(
                         RelativeChoiceField(
                             contentList = viewModel.relativesList,
                             onItemChosen = { relativeType ->
-                                viewModel.onEvent(AddEditEntryEvent.EnteredRelativeType(relativeType))
+                                viewModel.onEvent(AddEditEntryEvent.ChosenRelativeType(relativeType))
                             },
                             chosenItem = viewModel.relativeType.value
                         )

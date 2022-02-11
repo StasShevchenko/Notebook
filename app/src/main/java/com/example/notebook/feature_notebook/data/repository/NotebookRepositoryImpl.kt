@@ -47,12 +47,12 @@ class NotebookRepositoryImpl(
         dao.deleteOrganization(organization)
     }
 
-    override fun getPosts(): Flow<List<Post>> {
-        return dao.getPosts()
+    override fun getPosts(searchQuery: String): Flow<List<Post>> {
+        return dao.getPosts(searchQuery)
     }
 
-    override suspend fun insertPost(post: Post) {
-        dao.insertPost(post)
+    override suspend fun insertPost(post: Post): Long {
+        return dao.insertPost(post)
     }
 
     override suspend fun getPostById(postId: Int): Post {
