@@ -14,6 +14,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.text.TextStyle
@@ -23,6 +24,9 @@ import com.example.notebook.feature_notebook.domain.model.PeopleInfo
 import com.example.notebook.feature_notebook.domain.model.entities.People
 import com.example.notebook.feature_notebook.presentation.destinations.AddEditEntryScreenDestination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
+import java.sql.Timestamp
+import java.text.SimpleDateFormat
+import java.util.*
 
 @ExperimentalFoundationApi
 @ExperimentalComposeUiApi
@@ -148,11 +152,15 @@ fun EntryItem(
                     if (entry.familiarType != "" || entry.relativeType != "") {
                         Divider()
                     }
-                    Row() {
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
                         IconButton(
                             modifier = Modifier
                                 .padding(4.dp)
-                                .size(30.dp),
+                                .size(30.dp)
+                                .weight(0.1f)
+                            ,
                             onClick = {
                                 navigator.navigate(AddEditEntryScreenDestination(entry))
                             },
@@ -166,7 +174,8 @@ fun EntryItem(
                         IconButton(
                             modifier = Modifier
                                 .padding(4.dp)
-                                .size(30.dp),
+                                .size(30.dp)
+                                .weight(0.1f),
                             onClick = {
                                 onDeleteEntry(entry)
                             },
@@ -175,6 +184,13 @@ fun EntryItem(
                                 imageVector = Icons.Default.Delete,
                                 contentDescription = "",
                                 tint = MaterialTheme.colors.onSurface
+                            )
+                        }
+                        Row(modifier = Modifier.weight(0.8f).padding(end = 8.dp), horizontalArrangement = Arrangement.End) {
+                            Text(
+                                modifier = Modifier.alpha(0.8f),
+                                text = "создана: ${getDate(entry.timestamp)}",
+                                style = MaterialTheme.typography.caption
                             )
                         }
                     }
@@ -187,8 +203,10 @@ fun EntryItem(
 
 }
 
-
-
-
-
-
+fun getDate(milliSeconds: Long): String{
+    val stamp = Timestamp(milliSeconds)
+    val date = Date(stamp.time)
+    val sdf = SimpleDateFormat("dd.MM.yy")
+    val stringDate = sdf.format(date)
+    return stringDate
+}
