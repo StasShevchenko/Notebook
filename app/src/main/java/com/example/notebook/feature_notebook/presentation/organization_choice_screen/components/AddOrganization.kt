@@ -39,7 +39,7 @@ fun AddOrganization(
     organizationName: String,
     onOrganizationNameChanged: (String) -> Unit,
     workersAmount: Int,
-    onWorkersAmountChanged: (Int) -> Unit,
+    onWorkersAmountChanged: (String) -> Unit,
     onOrganizationSave: () -> Unit,
     chosenOrganizationType: OrganizationType?,
     onOrganizationTypeChoice: (OrganizationType) -> Unit,
@@ -127,7 +127,7 @@ fun AddOrganization(
                 OutlinedErrorTextField(
                     value = if (workersAmount != 0) workersAmount.toString() else "",
                     onValueChange = {
-                        onWorkersAmountChanged(if (it == "") 0 else it.toInt())
+                        onWorkersAmountChanged(it)
                     },
                     modifier = Modifier
                         .fillMaxWidth()

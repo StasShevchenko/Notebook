@@ -80,30 +80,42 @@ class OrganizationsViewModel @Inject constructor(
                 _state.value = state.value.copy(currentOrganizationType = event.organizationType)
             }
             is OrganizationsEvent.EnteredOrganizationName -> {
-                _state.value = state.value.copy(organizationName = event.name)
                 _nameFieldErrorStatus.value = false
+                if (event.name.length > 25) {
+                    _nameFieldErrorStatus.value = true
+                    _nameFieldErrorMessage.value = "слишком длинное имя!"
+                }
+                else {
+                    _state.value = state.value.copy(organizationName = event.name)
+                }
             }
             is OrganizationsEvent.EnteredWorkersAmount -> {
-                _state.value = state.value.copy(workersAmount = event.workersAmount)
                 _workersAmountFieldErrorStatus.value = false
+                if(event.workersAmount.length > 5){
+                    _workersAmountFieldErrorStatus.value = true
+                    _workersAmountFieldErrorMessage.value = "слишком большое число сотрудников!"
+                }
+                else{
+                _state.value = state.value.copy(workersAmount = if(event.workersAmount.isBlank()) 0 else event.workersAmount.toInt() )
+                }
             }
             OrganizationsEvent.SaveOrganization -> {
                 viewModelScope.launch {
 
                     if (_state.value.workersAmount == 0) {
-                        _workersAmountFieldErrorMessage.value = "Заполните поле!"
+                        _workersAmountFieldErrorMessage.value = "данное поле не может быть пустым!"
                         _workersAmountFieldErrorStatus.value = true
                     }
 
                     if (_state.value.organizationName == "") {
-                        _nameFieldErrorMessage.value = "Заполните поле!"
+                        _nameFieldErrorMessage.value = "данное поле не может быть пустым!"
                         _nameFieldErrorStatus.value = true
                     }
 
                     if (_state.value.organizations.find {
                             (it.organizationName == _state.value.organizationName)
                         } != null) {
-                        _nameFieldErrorMessage.value = "Данная организация уже существует!"
+                        _nameFieldErrorMessage.value = "данная организация уже существует!"
                         _nameFieldErrorStatus.value = true
                     }
 

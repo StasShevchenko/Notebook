@@ -6,7 +6,7 @@ import com.example.notebook.feature_notebook.domain.model.entities.OrganizationT
 
 sealed class OrganizationsEvent{
     data class EnteredOrganizationName(val name: String): OrganizationsEvent()
-    data class EnteredWorkersAmount(val workersAmount: Int): OrganizationsEvent()
+    data class EnteredWorkersAmount(val workersAmount: String): OrganizationsEvent()
     data class ChosenOrganizationType(val organizationType: OrganizationType): OrganizationsEvent()
     data class SearchOrganization(val searchQuery: String): OrganizationsEvent()
     data class ChosenOrganization(val organizationId: Int): OrganizationsEvent()
