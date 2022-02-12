@@ -2,11 +2,15 @@ package com.example.notebook.feature_notebook.presentation.add_edit_entry.compon
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.*
+import androidx.compose.foundation.relocation.BringIntoViewRequester
+import androidx.compose.foundation.relocation.bringIntoViewRequester
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
@@ -18,17 +22,22 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusState
 import androidx.compose.ui.focus.onFocusChanged
+import androidx.compose.ui.focus.onFocusEvent
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.toSize
 import com.example.notebook.feature_notebook.domain.model.entities.Post
 import com.example.notebook.feature_notebook.domain.model.entities.Relations
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
+@OptIn(ExperimentalFoundationApi::class, androidx.compose.ui.ExperimentalComposeUiApi::class)
 @Composable
 fun PostChoiceField(
     contentList: List<Post>,
@@ -39,10 +48,14 @@ fun PostChoiceField(
 ) {
     var expanded by remember { mutableStateOf(false) }
 
+    val keyBoardController = LocalSoftwareKeyboardController.current
     val focusManager = LocalFocusManager.current
+    val bringIntoViewRequester = remember { BringIntoViewRequester() }
+    val coroutineScope = rememberCoroutineScope()
 
-
-    Column() {
+    Column(
+        modifier = Modifier.bringIntoViewRequester(bringIntoViewRequester)
+    ) {
         OutlinedTextField(
             value = value,
             onValueChange = { postName ->
@@ -51,11 +64,23 @@ fun PostChoiceField(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(start = 8.dp, end = 8.dp, top = 8.dp)
+                .onFocusEvent { focusState ->
+                    if(focusState.isFocused){
+                        coroutineScope.launch {
+                            delay(150)
+                            bringIntoViewRequester.bringIntoView()
+                        }
+                    }
+                }
                 .onFocusChanged { focusState ->
                    expanded = focusState.isFocused
                 },
             label = { Text("Должность") },
             keyboardOptions = KeyboardOptions(capitalization = KeyboardCapitalization.Sentences),
+            keyboardActions = KeyboardActions(onDone = {
+                keyBoardController?.hide()
+                focusManager.clearFocus()
+            }),
             singleLine = true
         )
         AnimatedVisibility(visible = expanded and contentList.isNotEmpty()) {

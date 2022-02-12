@@ -60,7 +60,7 @@ class MainActivity : ComponentActivity() {
         WindowCompat.setDecorFitsSystemWindows(window, false)
 
         setContent {
-            ProvideWindowInsets() {
+            ProvideWindowInsets(windowInsetsAnimationsEnabled = true) {
                 NotebookTheme {
                     val focusManager = LocalFocusManager.current
                     val keyboardController = LocalSoftwareKeyboardController.current
