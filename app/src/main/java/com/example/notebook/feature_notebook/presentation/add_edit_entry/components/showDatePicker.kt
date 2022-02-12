@@ -48,6 +48,10 @@ fun showDatePicker(
     day = calendar.get(Calendar.DAY_OF_MONTH)
     calendar.time = Date()
 
+    val minCalendar = Calendar.getInstance()
+    minCalendar.set(1950, 0, 1)
+    val maxCalendar = Calendar.getInstance()
+    maxCalendar.set(2015, 11, 31)
 
     val datePickerDialog = DatePickerDialog(
         context,
@@ -63,7 +67,8 @@ fun showDatePicker(
         }, year, month, day,
 
     )
-
+    datePickerDialog.datePicker.minDate = minCalendar.timeInMillis
+    datePickerDialog.datePicker.maxDate = maxCalendar.timeInMillis
     Row(
         modifier
             .focusRequester(focusRequester)
