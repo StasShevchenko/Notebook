@@ -15,6 +15,7 @@ import com.example.notebook.feature_notebook.domain.use_case.entries_use_case.En
 import com.example.notebook.feature_notebook.domain.use_case.familiar_type_use_case.GetFamiliarTypes
 import com.example.notebook.feature_notebook.domain.use_case.posts_use_case.PostsUseCases
 import com.example.notebook.feature_notebook.domain.use_case.relative_type_use_case.GetRelativeTypes
+import com.example.notebook.feature_notebook.presentation.util.phoneNumberFormatter
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
@@ -174,7 +175,9 @@ class AddEditEntryViewModel @Inject constructor(
             }
             is AddEditEntryEvent.EnteredPhoneNumber -> {
                 _phoneNumberErrorStatus.value = false
-                _phoneNumber.value = event.phoneNumber
+                if(event.phoneNumber.length <= 11)
+                    _phoneNumber.value = event.phoneNumber
+
             }
             is AddEditEntryEvent.EnteredSecondName -> {
                 _secondNameErrorStatus.value = false
@@ -313,9 +316,12 @@ class AddEditEntryViewModel @Inject constructor(
         if (phoneNumber.value.isBlank()) {
             _phoneNumberErrorStatus.value = true
             _phoneNumberErrorMessage.value = "данное поле не может быть пустым!"
+        } else if (!((phoneNumber.value[0] == '7' || phoneNumber.value[0] == '8') && phoneNumber.value.length == 11)) {
+            _phoneNumberErrorStatus.value = true
+            _phoneNumberErrorMessage.value = "неверный формат номера!"
         }
         return !(nameErrorStatus.value || secondNameErrorStatus.value || patronymicErrorStatus.value
-                || addressErrorStatus.value)
+                || addressErrorStatus.value || phoneNumberErrorStatus.value)
     }
 
     private fun getPosts(searchQuery: String) {

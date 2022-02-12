@@ -23,6 +23,7 @@ import androidx.compose.ui.unit.dp
 import com.example.notebook.feature_notebook.domain.model.PeopleInfo
 import com.example.notebook.feature_notebook.domain.model.entities.People
 import com.example.notebook.feature_notebook.presentation.destinations.AddEditEntryScreenDestination
+import com.example.notebook.feature_notebook.presentation.util.phoneNumberFormatter
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import java.sql.Timestamp
 import java.text.SimpleDateFormat
@@ -123,7 +124,7 @@ fun EntryItem(
                     Spacer(modifier = Modifier.height(8.dp))
                     Divider()
                     Spacer(modifier = Modifier.height(4.dp))
-                    Text(text = "Номер телефона: ${entry.phoneNumber}")
+                    Text(text = "Номер телефона: ${phoneNumberFormatter(entry.phoneNumber)}")
                     Spacer(modifier = Modifier.height(4.dp))
                     Text(text = "Адрес: ${entry.address}")
                     Spacer(modifier = Modifier.height(4.dp))

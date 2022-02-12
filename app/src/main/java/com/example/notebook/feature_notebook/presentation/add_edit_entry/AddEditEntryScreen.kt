@@ -19,6 +19,7 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
@@ -28,6 +29,7 @@ import com.example.notebook.feature_notebook.presentation.add_edit_entry.AddEdit
 import com.example.notebook.feature_notebook.presentation.add_edit_entry.AddEditEntryViewModel
 import com.example.notebook.feature_notebook.presentation.destinations.OrganizationsScreenDestination
 import com.example.notebook.feature_notebook.presentation.util.OutlinedErrorTextField
+import com.example.notebook.feature_notebook.presentation.util.PhoneNumberVisualTransformation
 import com.google.accompanist.insets.*
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
@@ -241,7 +243,8 @@ fun AddEditEntryScreen(
                             keyboardActions = KeyboardActions(onNext = {
                                 focusManager.moveFocus(FocusDirection.Down)
                             }),
-                            singleLine = true
+                            singleLine = true,
+                            visualTransformation = PhoneNumberVisualTransformation()
                         )
 
                         Spacer(modifier = Modifier.height(4.dp))
