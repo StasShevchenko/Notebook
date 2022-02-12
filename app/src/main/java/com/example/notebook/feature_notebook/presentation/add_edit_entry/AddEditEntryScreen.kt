@@ -27,6 +27,7 @@ import com.example.notebook.feature_notebook.presentation.add_edit_entry.AddEdit
 import com.example.notebook.feature_notebook.presentation.add_edit_entry.AddEditEntryScreenArguments
 import com.example.notebook.feature_notebook.presentation.add_edit_entry.AddEditEntryViewModel
 import com.example.notebook.feature_notebook.presentation.destinations.OrganizationsScreenDestination
+import com.example.notebook.feature_notebook.presentation.util.OutlinedErrorTextField
 import com.google.accompanist.insets.*
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
@@ -67,8 +68,7 @@ fun AddEditEntryScreen(
     ProvideWindowInsets(windowInsetsAnimationsEnabled = true) {
         Scaffold(
             modifier = Modifier
-                .statusBarsPadding()
-               ,
+                .statusBarsPadding(),
             floatingActionButton = {
                 FloatingActionButton(
                     modifier = Modifier.navigationBarsWithImePadding(),
@@ -107,17 +107,17 @@ fun AddEditEntryScreen(
                         )
 
 
-
-                        OutlinedTextField(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(8.dp),
+                        OutlinedErrorTextField(
                             value = viewModel.name.value,
                             onValueChange = { name ->
                                 viewModel.onEvent(AddEditEntryEvent.EnteredName(name))
                             },
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(8.dp),
                             label = { Text("Имя") },
-                            singleLine = true,
+                            isError = viewModel.nameErrorStatus.value,
+                            errorMessage = viewModel.nameErrorMessage.value,
                             keyboardOptions = KeyboardOptions(
                                 capitalization = KeyboardCapitalization.Sentences,
                                 keyboardType = KeyboardType.Text,
@@ -126,21 +126,23 @@ fun AddEditEntryScreen(
                             keyboardActions = KeyboardActions(onNext = {
                                 focusManager.moveFocus(FocusDirection.Down)
 
-                            })
+                            }),
+                            singleLine = true
                         )
 
                         Spacer(modifier = Modifier.height(4.dp))
 
-                        OutlinedTextField(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(8.dp),
+                        OutlinedErrorTextField(
                             value = viewModel.secondName.value,
                             onValueChange = { secondName ->
                                 viewModel.onEvent(AddEditEntryEvent.EnteredSecondName(secondName))
                             },
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(8.dp),
                             label = { Text("Фамилия") },
-                            singleLine = true,
+                            isError = viewModel.secondNameErrorStatus.value,
+                            errorMessage = viewModel.secondNameErrorMessage.value,
                             keyboardOptions = KeyboardOptions(
                                 capitalization = KeyboardCapitalization.Sentences,
                                 keyboardType = KeyboardType.Text,
@@ -148,21 +150,23 @@ fun AddEditEntryScreen(
                             ),
                             keyboardActions = KeyboardActions(onNext = {
                                 focusManager.moveFocus(FocusDirection.Down)
-                            })
+                            }),
+                            singleLine = true
                         )
 
                         Spacer(modifier = Modifier.height(4.dp))
 
-                        OutlinedTextField(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(8.dp),
+                        OutlinedErrorTextField(
                             value = viewModel.patronymic.value,
                             onValueChange = { patronymic ->
                                 viewModel.onEvent(AddEditEntryEvent.EnteredPatronymic(patronymic))
                             },
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(8.dp),
                             label = { Text("Отчество") },
-                            singleLine = true,
+                            isError = viewModel.patronymicErrorStatus.value,
+                            errorMessage = viewModel.patronymicErrorMessage.value,
                             keyboardOptions = KeyboardOptions(
                                 capitalization = KeyboardCapitalization.Sentences,
                                 keyboardType = KeyboardType.Text,
@@ -170,7 +174,8 @@ fun AddEditEntryScreen(
                             ),
                             keyboardActions = KeyboardActions(onNext = {
                                 focusManager.moveFocus(FocusDirection.Down)
-                            })
+                            }),
+                            singleLine = true
                         )
 
                         Spacer(modifier = Modifier.height(4.dp))
@@ -183,20 +188,24 @@ fun AddEditEntryScreen(
                             dateOfBirth = viewModel.dateOfBirth.value,
                             onDateChange = { dateOfBirth ->
                                 viewModel.onEvent(AddEditEntryEvent.EnteredDate(dateOfBirth))
-                            })
+                            },
+                            errorStatus = viewModel.dateOfBirthErrorStatus.value,
+                            errorMessage = viewModel.dateOfBirthErrorMessage.value
+                        )
 
                         Spacer(modifier = Modifier.height(4.dp))
 
-                        OutlinedTextField(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(8.dp),
+                        OutlinedErrorTextField(
                             value = viewModel.address.value,
                             onValueChange = { address ->
                                 viewModel.onEvent(AddEditEntryEvent.EnteredAddress(address))
                             },
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(8.dp),
                             label = { Text("Адрес") },
-                            singleLine = true,
+                            isError = viewModel.addressErrorStatus.value,
+                            errorMessage = viewModel.addressErrorMessage.value,
                             keyboardOptions = KeyboardOptions(
                                 capitalization = KeyboardCapitalization.Sentences,
                                 keyboardType = KeyboardType.Text,
@@ -204,15 +213,13 @@ fun AddEditEntryScreen(
                             ),
                             keyboardActions = KeyboardActions(onNext = {
                                 focusManager.moveFocus(FocusDirection.Down)
-                            })
+                            }),
+                            singleLine = true
                         )
 
                         Spacer(modifier = Modifier.height(4.dp))
 
-                        OutlinedTextField(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(8.dp),
+                        OutlinedErrorTextField(
                             value = viewModel.phoneNumber.value,
                             onValueChange = { phoneNumber ->
                                 viewModel.onEvent(
@@ -221,18 +228,24 @@ fun AddEditEntryScreen(
                                     )
                                 )
                             },
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(8.dp),
                             label = { Text("Номер телефона") },
-                            singleLine = true,
+                            isError = viewModel.phoneNumberErrorStatus.value,
+                            errorMessage = viewModel.phoneNumberErrorMessage.value,
                             keyboardOptions = KeyboardOptions(
-                                capitalization = KeyboardCapitalization.Sentences,
-                                keyboardType = KeyboardType.Text,
+                                keyboardType = KeyboardType.Number,
                                 imeAction = ImeAction.Next
                             ),
                             keyboardActions = KeyboardActions(onNext = {
                                 focusManager.moveFocus(FocusDirection.Down)
-                            })
+                            }),
+                            singleLine = true
                         )
+
                         Spacer(modifier = Modifier.height(4.dp))
+
                         Button(
                             modifier = Modifier
                                 .fillMaxWidth()
@@ -285,3 +298,4 @@ fun AddEditEntryScreen(
         }
     }
 }
+

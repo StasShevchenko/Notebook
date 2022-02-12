@@ -28,6 +28,8 @@ import java.util.*
 @Composable
 fun showDatePicker(
     modifier: Modifier = Modifier,
+    errorStatus: Boolean,
+    errorMessage: String,
     onFocusChange: () -> Unit,
     dateOfBirth: String,
     onDateChange: (String) -> Unit,
@@ -75,6 +77,8 @@ fun showDatePicker(
         ReadonlyTextField(
             value = dateOfBirth,
             onValueChange = {},
+            errorStatus = errorStatus,
+            errorMessage = errorMessage,
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(8.dp),

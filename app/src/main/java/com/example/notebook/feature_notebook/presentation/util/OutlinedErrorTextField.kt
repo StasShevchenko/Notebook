@@ -25,9 +25,10 @@ fun OutlinedErrorTextField(
     label: @Composable() (() -> Unit)?,
     isError: Boolean,
     errorMessage: String,
-    keyboardOptions: KeyboardOptions,
-    keyboardActions: KeyboardActions,
-    singleLine: Boolean,
+    keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
+    keyboardActions: KeyboardActions = KeyboardActions.Default ,
+    singleLine: Boolean = false,
+    visualTransformation: VisualTransformation = VisualTransformation.None
 ) {
 
 
@@ -49,7 +50,8 @@ fun OutlinedErrorTextField(
             singleLine = singleLine,
             isError = isError,
             keyboardOptions = keyboardOptions,
-            keyboardActions = keyboardActions
+            keyboardActions = keyboardActions,
+            visualTransformation = visualTransformation
         )
         if (isError){
             Text(

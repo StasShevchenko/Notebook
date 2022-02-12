@@ -19,6 +19,7 @@ import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
+import com.example.notebook.feature_notebook.presentation.util.OutlinedErrorTextField
 import com.google.accompanist.insets.LocalWindowInsets
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
@@ -28,6 +29,8 @@ import kotlinx.coroutines.launch
 @Composable
 fun ReadonlyTextField(
     value: String,
+    errorStatus: Boolean,
+    errorMessage: String,
     onValueChange: (String) -> Unit,
     modifier: Modifier = Modifier,
     onClick: () -> Unit,
@@ -39,7 +42,7 @@ fun ReadonlyTextField(
 
 
     Box {
-        OutlinedTextField(
+        OutlinedErrorTextField(
             value = value,
             onValueChange = onValueChange,
             modifier = modifier
@@ -52,8 +55,11 @@ fun ReadonlyTextField(
 
                     }
                 },
-            label = label
+            label = label,
+            isError = errorStatus,
+            errorMessage = errorMessage
         )
+
         Box(
             modifier = Modifier
                 .matchParentSize()
