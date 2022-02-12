@@ -35,21 +35,20 @@ class AddEditEntryViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
-    var currentPeopleId: Int? = null
-        private set
+    private var currentPeopleId: Int = 0
 
     private var getPostsJob: Job? = null
 
     var relationsList: List<Relations> = emptyList()
         private set
 
-    private val _familiarType = mutableStateOf<Relations>(Relations(-1, ""))
+    private val _familiarType = mutableStateOf<Relations>(Relations(1, "Не указывать"))
     val familiarType: State<Relations> = _familiarType
 
     var relativesList: List<Relatives> = emptyList()
         private set
 
-    private val _relativeType = mutableStateOf<Relatives>(Relatives(-1, ""))
+    private val _relativeType = mutableStateOf<Relatives>(Relatives(1, "Не указывать"))
     val relativeType: State<Relatives> = _relativeType
 
     private val _currentPost = mutableStateOf<Post>(Post(-1, "", 0))

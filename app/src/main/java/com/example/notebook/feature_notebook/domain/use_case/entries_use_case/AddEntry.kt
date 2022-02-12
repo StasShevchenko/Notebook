@@ -9,20 +9,7 @@ class AddEntry(
     private val repository: NotebookRepository
 ) {
 
-    @Throws(InvalidEntryException::class)
     suspend operator fun invoke(entry: People){
-        if (entry.name.isBlank()) {
-        throw InvalidEntryException("Необходимо заполнить имя!")
-        }
-        if (entry.secondName.isBlank()) {
-            throw InvalidEntryException("Необходимо заполнить фамилию!")
-        }
-        if (entry.patronymic.isBlank()) {
-            throw InvalidEntryException("Необходимо заполнить отчество!")
-        }
-        if(entry.dateOfBirth.isBlank()){
-            throw InvalidEntryException("Выберите дату рождения!")
-        }
         repository.insertEntry(entry)
     }
 }

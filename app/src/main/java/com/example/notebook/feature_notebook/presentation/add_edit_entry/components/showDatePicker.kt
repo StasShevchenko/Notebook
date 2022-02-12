@@ -71,6 +71,10 @@ fun showDatePicker(
                 if (it.isFocused) {
                     datePickerDialog.show()
                 }
+                else{
+                    focusRequester.freeFocus()
+                }
+
             }
             .focusable()
     ) {

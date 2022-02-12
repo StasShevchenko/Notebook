@@ -2,6 +2,7 @@ package com.example.notebook.feature_notebook.presentation.add_edit_entry.compon
 
 import android.os.Build
 import androidx.annotation.RequiresApi
+import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.KeyboardActions
@@ -14,6 +15,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.*
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.ImeAction
@@ -31,6 +33,7 @@ import com.example.notebook.feature_notebook.presentation.destinations.Organizat
 import com.example.notebook.feature_notebook.presentation.util.OutlinedErrorTextField
 import com.example.notebook.feature_notebook.presentation.util.PhoneNumberVisualTransformation
 import com.google.accompanist.insets.*
+import com.google.android.material.datepicker.MaterialDatePicker
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import kotlinx.coroutines.flow.collectLatest
@@ -49,6 +52,7 @@ fun AddEditEntryScreen(
     val scrollState = rememberScrollState()
     val focusManager = LocalFocusManager.current
 
+
     val secondResult = navController.currentBackStackEntry
         ?.savedStateHandle
         ?.getLiveData<OrganizationInfo>("organizationInfo")
@@ -66,6 +70,7 @@ fun AddEditEntryScreen(
             }
         }
     }
+
 
     ProvideWindowInsets(windowInsetsAnimationsEnabled = true) {
         Scaffold(

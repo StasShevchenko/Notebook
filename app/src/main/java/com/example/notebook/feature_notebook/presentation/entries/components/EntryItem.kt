@@ -138,19 +138,19 @@ fun EntryItem(
                         Text(text = "Тип организации: ${entry.organizationType}")
                         Divider()
                     }
-                    if (entry.relativeType != "") {
+                    if (entry.relativeType != "Не указывать") {
                         Spacer(modifier = Modifier.height(4.dp))
                         Text(text = "Родство: ${entry.relativeType}")
 
                     }
-                    if (entry.familiarType != "") {
+                    if (entry.familiarType != "Не указывать") {
                         Spacer(modifier = Modifier.height(4.dp))
                         Text(
                             text = "Отношения: ${entry.familiarType}",
                             modifier = Modifier.padding(bottom = 8.dp)
                         )
                     }
-                    if (entry.familiarType != "" || entry.relativeType != "") {
+                    if (entry.familiarType != "Не указывать" || entry.relativeType != "Не указывать") {
                         Divider()
                     }
                     Row(
