@@ -44,8 +44,8 @@ class PhoneNumberVisualTransformation : VisualTransformation {
                 if(offset == 2) return offset - 1
                 if (offset <= 7) return offset - 3
                 if(offset == 8) return offset - 4
-                if (offset <= 11) return offset - 5
-                if(offset <= 14) return offset - 6
+                if (offset <= 12) return offset - 5
+                if(offset <= 15) return offset - 6
                 if (offset <= 17) return offset - 7
                 return 11
             }

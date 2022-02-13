@@ -19,6 +19,8 @@ import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.unit.dp
 import com.example.notebook.R
 import com.google.android.material.datepicker.MaterialDatePicker
+import java.text.ParseException
+import java.text.SimpleDateFormat
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.util.*
@@ -35,6 +37,7 @@ fun showDatePicker(
     onDateChange: (String) -> Unit,
     context: Context = LocalContext.current
 ) {
+    var dismissCounter = 0
     val focusManager = LocalFocusManager.current
     val focusRequester = remember { FocusRequester() }
 
@@ -42,11 +45,19 @@ fun showDatePicker(
     val month: Int
     val day: Int
 
+    var initialDate = Date()
+    try {
+        initialDate.time = SimpleDateFormat("dd.MM.yyyy").parse(dateOfBirth).time
+    } catch (e: ParseException) {
+        initialDate = Date()
+    }
+
     val calendar = Calendar.getInstance()
+    calendar.time = initialDate
     year = calendar.get(Calendar.YEAR)
     month = calendar.get(Calendar.MONTH)
     day = calendar.get(Calendar.DAY_OF_MONTH)
-    calendar.time = Date()
+
 
     val minCalendar = Calendar.getInstance()
     minCalendar.set(1950, 0, 1)
@@ -62,11 +73,16 @@ fun showDatePicker(
                     DateTimeFormatter.ofPattern("dd.MM.yyyy")
                 )
             )
-            onFocusChange()
+            dismissCounter++
+           onFocusChange()
 
         }, year, month, day,
-
     )
+    datePickerDialog.setOnDismissListener {
+        if(dismissCounter == 0)
+        focusManager.clearFocus()
+    }
+
     datePickerDialog.datePicker.minDate = minCalendar.timeInMillis
     datePickerDialog.datePicker.maxDate = maxCalendar.timeInMillis
     Row(
@@ -75,8 +91,7 @@ fun showDatePicker(
             .onFocusChanged {
                 if (it.isFocused) {
                     datePickerDialog.show()
-                }
-                else{
+                } else {
                     focusRequester.freeFocus()
                 }
 

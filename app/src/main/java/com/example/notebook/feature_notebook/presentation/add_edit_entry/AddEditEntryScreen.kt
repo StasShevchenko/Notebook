@@ -187,6 +187,7 @@ fun AddEditEntryScreen(
 
                         Spacer(modifier = Modifier.height(4.dp))
 
+
                         showDatePicker(
                             modifier = Modifier,
                             onFocusChange = {
@@ -199,6 +200,9 @@ fun AddEditEntryScreen(
                             errorStatus = viewModel.dateOfBirthErrorStatus.value,
                             errorMessage = viewModel.dateOfBirthErrorMessage.value
                         )
+
+
+
 
                         Spacer(modifier = Modifier.height(4.dp))
 
