@@ -230,8 +230,10 @@ class AddEditEntryViewModel @Inject constructor(
                 getPosts(postName.value)
             }
             is AddEditEntryEvent.EnteredPostName -> {
-                _postName.value = event.searchQuery
-                getPosts(event.searchQuery)
+                if(event.searchQuery.length <= 20) {
+                    _postName.value = event.searchQuery
+                    getPosts(event.searchQuery)
+                }
             }
             is AddEditEntryEvent.DeletedPost -> {
                 viewModelScope.launch {
