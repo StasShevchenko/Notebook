@@ -14,6 +14,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.unit.dp
@@ -93,6 +94,15 @@ fun EntriesScreen(
                         modifier = Modifier.align(Alignment.CenterHorizontally),
                         color = MaterialTheme.colors.primary
                     )
+                }
+            }
+            if(viewModel.state.value.entries.size == 0){
+                Column(
+                    modifier = Modifier.fillMaxSize().alpha(0.7f),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.Center
+                ){
+                    Text("Список пуст :(")
                 }
             }
             LazyColumn(
