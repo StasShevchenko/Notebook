@@ -96,7 +96,7 @@ fun EntriesScreen(
                     )
                 }
             }
-            if(viewModel.state.value.entries.size == 0){
+            if(viewModel.state.value.entries.isEmpty()){
                 Column(
                     modifier = Modifier.fillMaxSize().alpha(0.7f),
                     horizontalAlignment = Alignment.CenterHorizontally,

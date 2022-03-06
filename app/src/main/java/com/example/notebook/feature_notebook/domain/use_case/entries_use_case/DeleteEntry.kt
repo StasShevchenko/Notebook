@@ -6,7 +6,6 @@ import com.example.notebook.feature_notebook.domain.repository.NotebookRepositor
 class DeleteEntry(
     private val repository: NotebookRepository
 ) {
-
     suspend operator fun invoke(entryId: Int){
         repository.deleteEntry(entryId)
     }

@@ -8,7 +8,6 @@ import kotlin.jvm.Throws
 class AddEntry(
     private val repository: NotebookRepository
 ) {
-
     suspend operator fun invoke(entry: People){
         repository.insertEntry(entry)
     }

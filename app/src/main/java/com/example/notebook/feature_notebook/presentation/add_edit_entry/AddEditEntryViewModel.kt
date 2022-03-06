@@ -337,5 +337,4 @@ class AddEditEntryViewModel @Inject constructor(
         object SaveNote : UiEvent()
     }
 
-
 }
